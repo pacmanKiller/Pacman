@@ -1,0 +1,18 @@
+import java.awt.*;
+
+import javax.swing.*;
+public class PacmanIntroMenu extends JPanel {
+	public PacmanIntroMenu(){
+		
+	}
+	
+	public void paintComponent(Graphics g){
+		
+	}
+
+	
+	public static void main(String[] args) {
+		
+	}
+
+}
