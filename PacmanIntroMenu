@@ -1,24 +1,64 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 public class PacmanIntroMenu extends JPanel {
-	Image image;
+	JButton startButton, quitButton;
+	JFrame pacmanFrame;
 	public PacmanIntroMenu(){
-		JFrame pacmanFrame=new JFrame();
+		pacmanFrame=new JFrame();
+		BorderLayout borderLayout=new BorderLayout();
+		GridLayout gridLayout=new GridLayout();
+		borderLayout.getLayoutComponent(gridLayout);
+		this.setLayout(borderLayout);
+		GridBagConstraints c=new GridBagConstraints();
+		startButton=new JButton("Start Game");
+		quitButton=new JButton("Quit");
+		try {
+			pacmanFrame.setContentPane(new JPanel() {
+				BufferedImage image = ImageIO.read(new File("pacmanBackground.png"));
+				BufferedImage titleImage=ImageIO.read(new File("pacmanTitle.jpg"));
+				public void paintComponent(Graphics g) {
+					super.paintComponent(g);
+					g.drawImage(image, 0, 0, this);
+					g.drawImage(titleImage, 130, 50, this);
+				}
+			});
+		} catch (IOException e) {
+		}
+		startButton.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+
+		});
+		quitButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				pacmanFrame.dispatchEvent(new WindowEvent(pacmanFrame, WindowEvent.WINDOW_CLOSING));
+			}
+		});
+		this.add(startButton, c);
+		this.add(quitButton, c);
 		ImageIcon pacmanIcon=new ImageIcon("pacmanBackground.png");
 		pacmanFrame.setTitle("Start Menu");
-		image=pacmanIcon.getImage();
 		pacmanFrame.setSize(575, 657);
 		pacmanFrame.add(this);
+		pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pacmanFrame.setVisible(true);
 	}
-	
+
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawImage(image, 0, 0, null);
 	}
 
-	
+
 	public static void main(String[] args) {
 		new PacmanIntroMenu();
 	}
