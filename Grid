@@ -1,1 +1,64 @@
 
+public class Grid {
+	private boolean[][] validSpaces;
+	private int[][] ticTacs;
+	final int xSize = 26;
+	final int ySize = 28;
+	public Grid(){
+		validSpaces = new boolean[xSize][ySize];
+		ticTacs = new int[xSize][ySize];
+		for(int x = 0; x < xSize; x++){
+			for(int y = 0; y < ySize; y++){
+				validSpaces[x][y] = false;
+				ticTacs[x][y] = 0;
+			}
+		}
+		fillGrids();
+	}
+	private void fillGrids(){
+		fillHorizontal(1,1,12,true);
+		fillHorizontal(15,1,12,true);
+		fillVertical(1,1,8,true);
+		fillVertical(1,6,25,true);
+		fillVertical(1,12,5,true);
+		fillVertical(1,15,5,true);
+		fillVertical(1,21,25,true);
+		fillVertical(1,26,8,true);
+		fillHorizontal(1,5,26,true);
+	}
+	private void fillVertical(int yStart, int x, int length, boolean tac){
+		for(int y =0 ; y < length; y++){
+			validSpaces[x-1][yStart-1 + y] = true;
+			if(tac)
+				ticTacs[x-1][yStart-1 + y] = 1;
+		}
+	}
+	private void fillHorizontal(int xStart, int y, int length, boolean tac){
+		for(int x =0 ; x < length; x++){
+			validSpaces[xStart-1 + x][y-1] = true;
+			if(tac)
+				ticTacs[xStart-1 + x][y-1] = 1;
+		}
+	}
+	public void printGrid(){
+		for(int y = 0; y < ySize; y++){
+			for(int x = 0; x < xSize; x++){
+				if(validSpaces[x][y]){
+					switch(ticTacs[x][y]){
+					case 0: System.out.print("N "); break;
+					case 1: System.out.print("L "); break;
+					case 2: System.out.print("B "); break;
+					}
+				}else{
+					System.out.print("  ");
+				}	
+			}
+			System.out.print("\n");
+		}
+	}
+	public static void main(String[] args){
+		Grid g = new Grid();
+		g.printGrid();
+	}
+}
+
