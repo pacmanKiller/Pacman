@@ -25,6 +25,22 @@ public class Grid {
 		fillVertical(1,21,25,true);
 		fillVertical(1,26,8,true);
 		fillHorizontal(1,5,26,true);
+		fillVertical(5,9,4,true);
+		fillVertical(5,18,4,true);
+		fillHorizontal(1,8,6, true);
+		fillHorizontal(9,8,4,true);
+		fillHorizontal(15,8,4,true);
+		fillHorizontal(21,8,6,true);
+		fillVertical(9,15,2,false);
+		fillVertical(9,12,2,false);
+		fillHorizontal(9,10,10,false);
+		fillVertical(10,9,9,false);
+		fillVertical(10,18,9,false);
+		fillHorizontal(1,13,9,false);
+		fillHorizontal(18,13,9,false);
+		fillHorizontal(9,17,10,false);
+		fillHorizontal(1,19,12,true);
+		fillHorizontal(15,19,12,true);
 	}
 	private void fillVertical(int yStart, int x, int length, boolean tac){
 		for(int y =0 ; y < length; y++){
@@ -61,4 +77,3 @@ public class Grid {
 		g.printGrid();
 	}
 }
-
