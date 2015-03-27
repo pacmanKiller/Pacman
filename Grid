@@ -41,6 +41,13 @@ public class Grid {
 		fillHorizontal(9,17,10,false);
 		fillHorizontal(1,19,12,true);
 		fillHorizontal(15,19,12,true);
+		fillVertical(19,1,4,true);
+		fillVertical(19,12,4,true);
+		fillVertical(19,15,4,true);
+		fillVertical(19,26,4,true);
+		fillHorizontal(1,22,3,true);
+		fillHorizontal(6,22,16,true);
+		fillHorizontal(24,22,3,true);
 	}
 	private void fillVertical(int yStart, int x, int length, boolean tac){
 		for(int y =0 ; y < length; y++){
