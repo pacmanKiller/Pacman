@@ -9,33 +9,32 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 public class PacmanIntroMenu extends JPanel {
-	JButton startButton, quitButton;
+	JButton startButton, quitButton, storeButton;
 	JFrame pacmanFrame;
+	BufferedImage image;
+	BufferedImage titleImage;
+	BufferedImage imageCheck;
 	public PacmanIntroMenu(){
 		pacmanFrame=new JFrame();
-		BorderLayout borderLayout=new BorderLayout();
-		GridLayout gridLayout=new GridLayout();
-		borderLayout.getLayoutComponent(gridLayout);
-		this.setLayout(borderLayout);
+		try {
+			image = ImageIO.read(new File("pacmanBackground.png"));
+			titleImage=ImageIO.read(new File("pacmanTitle.jpg"));
+		} catch (IOException e1) {
+		}
+		GridBagLayout gridLayout=new GridBagLayout();
+		this.setLayout(gridLayout);
 		GridBagConstraints c=new GridBagConstraints();
+		
 		startButton=new JButton("Start Game");
 		quitButton=new JButton("Quit");
-		try {
-			pacmanFrame.setContentPane(new JPanel() {
-				BufferedImage image = ImageIO.read(new File("pacmanBackground.png"));
-				BufferedImage titleImage=ImageIO.read(new File("pacmanTitle.jpg"));
-				public void paintComponent(Graphics g) {
-					super.paintComponent(g);
-					g.drawImage(image, 0, 0, this);
-					g.drawImage(titleImage, 130, 50, this);
-				}
-			});
-		} catch (IOException e) {
-		}
+		storeButton=new JButton("Upgrade Store");
+		pacmanFrame.setContentPane(this);
 		startButton.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Grid grid=new Grid();
+				grid.printGrid();
+				pacmanFrame.dispatchEvent(new WindowEvent(pacmanFrame, WindowEvent.WINDOW_CLOSING));
 			}
 
 		});
@@ -44,18 +43,30 @@ public class PacmanIntroMenu extends JPanel {
 				pacmanFrame.dispatchEvent(new WindowEvent(pacmanFrame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
+		c.fill= GridBagConstraints.CENTER;
+		c.gridx = 0;
+		c.gridy = 10;
 		this.add(startButton, c);
+		c.fill= GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 12;
 		this.add(quitButton, c);
+		c.fill=GridBagConstraints.HORIZONTAL;
+		c.gridx=0;
+		c.gridy=11;
+		this.add(storeButton, c);
 		ImageIcon pacmanIcon=new ImageIcon("pacmanBackground.png");
 		pacmanFrame.setTitle("Start Menu");
 		pacmanFrame.setSize(575, 657);
-		pacmanFrame.add(this);
 		pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pacmanFrame.setVisible(true);
 	}
 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
+		g.drawImage(image, 0, 0, this);
+		g.drawImage(titleImage, 130, 50, this);
+		g.drawImage(imageCheck, 120, 17, this);
 	}
 
 
