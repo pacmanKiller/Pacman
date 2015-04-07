@@ -48,6 +48,23 @@ public class Grid {
 		fillHorizontal(1,22,3,true);
 		fillHorizontal(6,22,16,true);
 		fillHorizontal(24,22,3,true);
+		fillVertical(22,3,4,true);
+		fillVertical(22,9,4,true);
+		fillVertical(22,18,4,true);
+		fillVertical(22,24,4,true);
+		fillHorizontal(1,25,6,true);
+		fillHorizontal(9,25,4,true);
+		fillHorizontal(15,25,4,true);
+		fillHorizontal(21,25,6,true);
+		fillVertical(25,1,4,true);
+		fillVertical(25,13,4,true);
+		fillVertical(25,15,4,true);
+		fillVertical(25,26,4,true);
+		fillHorizontal(1,28,26,true);
+		ticTacs[0][2] = 2;
+		ticTacs[25][2] = 2;
+		ticTacs[0][21] = 2;
+		ticTacs[25][21] = 2;
 	}
 	private void fillVertical(int yStart, int x, int length, boolean tac){
 		for(int y =0 ; y < length; y++){
