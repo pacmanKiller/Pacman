@@ -1,0 +1,65 @@
+
+public class Pacman {
+	private Grid grid;
+	public boolean superPower = false;
+	private int xLoc, yLoc;
+	private int direction = 1;
+	public final int RIGHT = 1;
+	public final int UP = 2;
+	public final int LEFT = 3;
+	public final int DOWN = 4;
+	private int[] nextLocation(){
+		if(direction == RIGHT){
+			int[] ret = {xLoc+1,yLoc};
+			return ret;
+		}
+		if(direction == LEFT){
+			int[] ret = {xLoc-1,yLoc};
+			return ret;
+		}
+		if(direction == UP){
+			int[] ret = {xLoc,yLoc-1};
+			return ret;
+		}
+		if(direction == DOWN){
+			int[] ret = {xLoc,yLoc+1};
+			return ret;
+		}
+		return null;
+	}
+	public int[] getPositions(){
+		int[] ret = {xLoc,yLoc};
+		return ret;
+	}
+	public Pacman(int xStart, int yStart, Grid g){
+		xLoc = xStart;
+		yLoc = yStart;
+		grid = g;
+	}
+	public void move(){
+		if(grid.isValid(nextLocation()[0], nextLocation()[1])){
+			superPower = grid.eat(nextLocation()[0], nextLocation()[1]);
+			xLoc = nextLocation()[0];
+			yLoc = nextLocation()[1];
+		}else{
+			direction = (int)(Math.random()*4+1);
+			System.out.println(nextLocation()[0] + " " + nextLocation()[1] + " " + direction);
+			move();
+		}
+		//System.out.println(xLoc + " " + yLoc);
+		//grid.printGrid();
+	}
+	public static void main(String[] args){
+		Grid g = new Grid();
+		Pacman p = new Pacman(13, 17, g);
+		for(int x = 0; x < 1000; x++){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			p.move();
+			g.printGrid(p.getPositions()[0],p.getPositions()[1]);
+		}
+	}
+}
