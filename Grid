@@ -80,14 +80,32 @@ public class Grid {
 				ticTacs[xStart-1 + x][y-1] = 1;
 		}
 	}
-	public void printGrid(){
+	public boolean isValid(int x, int y){
+		if(x <= xSize && y <= ySize && x > 0 && y > 0)
+			return validSpaces[x-1][y-1];
+		return false;
+		
+	}
+	public int getTackStatus(int x, int y){
+		return ticTacs[x-1][y-1];
+	}
+	public boolean eat(int x, int y){
+		boolean ret = (ticTacs[x-1][y-1] == 2);
+		ticTacs[x-1][y-1] = 0;
+		return ret;
+	}
+	public void printGrid(int pacX, int pacY){
 		for(int y = 0; y < ySize; y++){
 			for(int x = 0; x < xSize; x++){
 				if(validSpaces[x][y]){
-					switch(ticTacs[x][y]){
-					case 0: System.out.print("N "); break;
-					case 1: System.out.print("L "); break;
-					case 2: System.out.print("B "); break;
+					if(pacX-1  == x && pacY-1 == y)
+						System.out.print("P ");
+					else{
+						switch(ticTacs[x][y]){
+						case 0: System.out.print("N "); break;
+						case 1: System.out.print("L "); break;
+						case 2: System.out.print("B "); break;
+					}
 					}
 				}else{
 					System.out.print("  ");
@@ -95,9 +113,5 @@ public class Grid {
 			}
 			System.out.print("\n");
 		}
-	}
-	public static void main(String[] args){
-		Grid g = new Grid();
-		g.printGrid();
 	}
 }
