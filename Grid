@@ -2,6 +2,7 @@
 public class Grid {
 	private boolean[][] validSpaces;
 	private int[][] ticTacs;
+	private Pacman pac = null;
 	final int xSize = 26;
 	final int ySize = 28;
 	public Grid(){
@@ -14,6 +15,9 @@ public class Grid {
 			}
 		}
 		fillGrids();
+	}
+	public void setPacman(Pacman p){
+		pac = p;
 	}
 	private void fillGrids(){
 		fillHorizontal(1,1,12,true);
@@ -94,11 +98,11 @@ public class Grid {
 		ticTacs[x-1][y-1] = 0;
 		return ret;
 	}
-	public void printGrid(int pacX, int pacY){
+	public void printGrid(){
 		for(int y = 0; y < ySize; y++){
 			for(int x = 0; x < xSize; x++){
 				if(validSpaces[x][y]){
-					if(pacX-1  == x && pacY-1 == y)
+					if(pac != null && pac.getPositions()[0]-1  == x && pac.getPositions()[1]-1 == y)
 						System.out.print("P ");
 					else{
 						switch(ticTacs[x][y]){
