@@ -8,6 +8,12 @@ public class Pacman {
 	public final int UP = 2;
 	public final int LEFT = 3;
 	public final int DOWN = 4;
+	public Pacman(int xStart, int yStart, Grid g){
+		xLoc = xStart;
+		yLoc = yStart;
+		grid = g;
+		g.setPacman(this);
+	}
 	private int[] nextLocation(){
 		if(direction == RIGHT){
 			int[] ret = {xLoc+1,yLoc};
@@ -30,11 +36,6 @@ public class Pacman {
 	public int[] getPositions(){
 		int[] ret = {xLoc,yLoc};
 		return ret;
-	}
-	public Pacman(int xStart, int yStart, Grid g){
-		xLoc = xStart;
-		yLoc = yStart;
-		grid = g;
 	}
 	public void move(){
 		if(grid.isValid(nextLocation()[0], nextLocation()[1])){
@@ -59,7 +60,7 @@ public class Pacman {
 				e.printStackTrace();
 			}
 			p.move();
-			g.printGrid(p.getPositions()[0],p.getPositions()[1]);
+			g.printGrid();
 		}
 	}
 }
