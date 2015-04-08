@@ -57,7 +57,7 @@ public class Grid {
 		fillHorizontal(15,25,4,true);
 		fillHorizontal(21,25,6,true);
 		fillVertical(25,1,4,true);
-		fillVertical(25,13,4,true);
+		fillVertical(25,12,4,true);
 		fillVertical(25,15,4,true);
 		fillVertical(25,26,4,true);
 		fillHorizontal(1,28,26,true);
