@@ -1,0 +1,68 @@
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+
+public class GraphicalGrid extends JPanel{
+	BufferedImage image, littleTac, bigTac;
+	JFrame pacFrame;
+	boolean gridFilled;
+	Grid grid;
+	GraphicalGrid(){
+		grid=new Grid();
+		try {
+			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
+			littleTac = ImageIO.read(new File("Tac.png"));
+			bigTac=ImageIO.read(new File("BigTac.png"));
+		} catch (IOException e1) {
+		}
+		pacFrame=new JFrame();
+		pacFrame.setContentPane(this);
+		pacFrame.setTitle("Pacman");
+		pacFrame.setSize(650, 657);
+		pacFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pacFrame.setVisible(true);
+	}
+	public void fillGraphicalGrid(Graphics g){
+		if(!gridFilled){
+			for(int i=1; i<=26; i++){
+				for(int j=1; j<=14; j++){
+					if(grid.getTackStatus(i, j)==1){
+						g.drawImage(littleTac, (int)(i*19.6)+70, (int)(j*20.2)+7, this);
+					}
+					if(grid.getTackStatus(i, j)==2){
+						g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+7, this);
+					}
+				}
+			}
+			for(int i=1; i<=26; i++){
+				for(int j=15; j<=28; j++){
+					if(grid.getTackStatus(i, j)==1){
+						g.drawImage(littleTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+
+					}
+					if(grid.getTackStatus(i, j)==2){
+						g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+
+					}
+				}
+			}
+			gridFilled=true;
+		}
+	}
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		g.drawImage(image, 0, 0, this);
+		fillGraphicalGrid(g);
+	}
+
+	
+	public static void main(String[] args) {
+		new GraphicalGrid();
+	}
+
+}
