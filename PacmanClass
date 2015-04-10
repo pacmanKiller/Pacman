@@ -1,7 +1,13 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+
 
 public class Pacman {
 	private Grid grid;
 	public boolean superPower = false;
+	private BufferedImage pacPic = null;
+	private boolean mouth = true;;
 	private int xLoc, yLoc;
 	private int direction = 1;
 	public final int RIGHT = 1;
@@ -47,8 +53,28 @@ public class Pacman {
 			System.out.println(nextLocation()[0] + " " + nextLocation()[1] + " " + direction);
 			move();
 		}
+		setPicture();
 		//System.out.println(xLoc + " " + yLoc);
 		//grid.printGrid();
+	}
+	public void setPicture(){
+		String picDirection = "";
+		switch(direction){
+		case DOWN: picDirection = "DownPacman"; break;
+		case UP: picDirection = "UpPacmam"; break;
+		case LEFT: picDirection = "LeftPacman"; break;
+		case RIGHT: picDirection = "RightPacman"; break;
+		}
+		String picMouth;
+		if(mouth)
+			picMouth = "MouthOpen.png";
+		else
+			picMouth = "MouthClosed.png";
+		mouth = !mouth;
+		pacPic = ImageIO.read(new File(picDirection + picMouth));
+	}
+	public BufferedImage getPicture(){
+		return pacPic;
 	}
 	public static void main(String[] args){
 		Grid g = new Grid();
