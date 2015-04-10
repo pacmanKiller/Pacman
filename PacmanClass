@@ -48,6 +48,7 @@ public class Pacman {
 			superPower = grid.eat(nextLocation()[0], nextLocation()[1]);
 			xLoc = nextLocation()[0];
 			yLoc = nextLocation()[1];
+			setPicture();
 		}else{
 			direction = (int)(Math.random()*4+1);
 			setPicture();
