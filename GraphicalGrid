@@ -1,90 +1,79 @@
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 
-public class Pacman {
-	private Grid grid;
-	public boolean superPower = false;
-	private BufferedImage pacPic = null;
-	private boolean mouth = true;;
-	private int xLoc, yLoc;
-	private int direction = 1;
-	public final int RIGHT = 1;
-	public final int UP = 2;
-	public final int LEFT = 3;
-	public final int DOWN = 4;
-	public Pacman(int xStart, int yStart, Grid g){
-		xLoc = xStart;
-		yLoc = yStart;
-		grid = g;
-		g.setPacman(this);
-	}
-	private int[] nextLocation(){
-		if(direction == RIGHT){
-			int[] ret = {xLoc+1,yLoc};
-			return ret;
+public class GraphicalGrid extends JPanel{
+	BufferedImage image, littleTac, bigTac,pacman;
+	JFrame pacFrame;
+	boolean gridFilled;
+	static Grid grid;
+	static Pacman p;
+	GraphicalGrid(){
+		grid=new Grid();
+		p=new Pacman(13, 17, grid);
+		try {
+			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
+			littleTac = ImageIO.read(new File("Tac.png"));
+			bigTac=ImageIO.read(new File("BigTac.png"));
+			pacman = ImageIO.read(new File("LeftPacmanMouthOpen.png"));
+		} catch (IOException e1) {
 		}
-		if(direction == LEFT){
-			int[] ret = {xLoc-1,yLoc};
-			return ret;
-		}
-		if(direction == UP){
-			int[] ret = {xLoc,yLoc-1};
-			return ret;
-		}
-		if(direction == DOWN){
-			int[] ret = {xLoc,yLoc+1};
-			return ret;
-		}
-		return null;
+		pacFrame=new JFrame();
+		pacFrame.setContentPane(this);
+		pacFrame.setTitle("Pacman");
+		pacFrame.setSize(650, 657);
+		pacFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pacFrame.setResizable(false);
+		pacFrame.setVisible(true);
 	}
-	public int[] getPositions(){
-		int[] ret = {xLoc,yLoc};
-		return ret;
+	public void fillGraphicalGrid(Graphics g){
+			for(int i=1; i<=26; i++){
+				for(int j=1; j<=14; j++){
+					if(grid.getTackStatus(i, j)==1){
+						g.drawImage(littleTac, (int)(i*19.6)+70, (int)(j*20.2)+7, this);
+					}else if(grid.getTackStatus(i, j)==2){
+						g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+7, this);
+					}else{}
+				}
+			}
+			for(int i=1; i<=26; i++){
+				for(int j=15; j<=28; j++){
+					if(grid.getTackStatus(i, j)==1){
+						g.drawImage(littleTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+
+					}else if(grid.getTackStatus(i, j)==2){
+						g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+
+					}else{}
+				}
+			}
 	}
-	public void move(){
-		if(grid.isValid(nextLocation()[0], nextLocation()[1])){
-			superPower = grid.eat(nextLocation()[0], nextLocation()[1]);
-			xLoc = nextLocation()[0];
-			yLoc = nextLocation()[1];
-		}else{
-			direction = (int)(Math.random()*4+1);
-			System.out.println(nextLocation()[0] + " " + nextLocation()[1] + " " + direction);
-			move();
-		}
-		setPicture();
-		//System.out.println(xLoc + " " + yLoc);
-		//grid.printGrid();
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		g.drawImage(image, 0, 0, this);
+		g.drawImage(p.getPicture(), (int)((p.getPositions()[0]*19.6)+70),(int)((p.getPositions()[1]*20.2)+7), this);
+		fillGraphicalGrid(g);
+
 	}
-	public void setPicture(){
-		String picDirection = "";
-		switch(direction){
-		case DOWN: picDirection = "Down"; break;
-		case UP: picDirection = "Up"; break;
-		case LEFT: picDirection = "Left"; break;
-		case RIGHT: picDirection = "Right"; break;
-		}
-		String picMouth;
-		if(mouth)
-			picMouth = "MouthOpen";
-		else
-			picMouth = "MouthClosed";
-		mouth = !mouth;
-		pacPic = null;
-	}
-	public BufferedImage getPicture(){
-		return pacPic;
-	}
-	public static void main(String[] args){
-		Grid g = new Grid();
-		Pacman p = new Pacman(13, 17, g);
+
+	
+	public static void main(String[] args) {
+		GraphicalGrid g=new GraphicalGrid();
 		for(int x = 0; x < 1000; x++){
+			p.move();
 			try {
 				Thread.sleep(1000);
+				g.repaint();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			p.move();
-			g.printGrid();
+			
 		}
 	}
+
 }
