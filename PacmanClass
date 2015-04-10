@@ -50,10 +50,10 @@ public class Pacman {
 			yLoc = nextLocation()[1];
 		}else{
 			direction = (int)(Math.random()*4+1);
+			setPicture();
 			System.out.println(nextLocation()[0] + " " + nextLocation()[1] + " " + direction);
 			move();
 		}
-		setPicture();
 		//System.out.println(xLoc + " " + yLoc);
 		//grid.printGrid();
 	}
