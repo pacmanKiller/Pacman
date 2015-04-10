@@ -61,7 +61,7 @@ public class Pacman {
 		String picDirection = "";
 		switch(direction){
 		case DOWN: picDirection = "DownPacman"; break;
-		case UP: picDirection = "UpPacmam"; break;
+		case UP: picDirection = "UpPacman"; break;
 		case LEFT: picDirection = "LeftPacman"; break;
 		case RIGHT: picDirection = "RightPacman"; break;
 		}
