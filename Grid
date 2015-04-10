@@ -1,4 +1,3 @@
-
 public class Grid {
 	private boolean[][] validSpaces;
 	private int[][] ticTacs;
