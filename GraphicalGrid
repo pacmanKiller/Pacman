@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +20,20 @@ public class GraphicalGrid extends JPanel{
 		p=new Pacman(13, 17, grid);
 		try {
 			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
-			littleTac = ImageIO.read(new File("Tac.png"));
+			littleTac = ImageIO.read(new File("LittleTac.png"));
 			bigTac=ImageIO.read(new File("BigTac.png"));
 			pacman = ImageIO.read(new File("LeftPacmanMouthOpen.png"));
 		} catch (IOException e1) {
 		}
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP,0), "face up");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,0), "face down");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,0), "face left");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,0), "face right");
+		this.getActionMap().put("face up", new MoveAction(2, p));
+		this.getActionMap().put("face down", new MoveAction(4, p));
+		this.getActionMap().put("face left", new MoveAction(3, p));
+		this.getActionMap().put("face right", new MoveAction(1, p));
+
 		pacFrame=new JFrame();
 		pacFrame.setContentPane(this);
 		pacFrame.setTitle("Pacman");
@@ -31,13 +42,42 @@ public class GraphicalGrid extends JPanel{
 		pacFrame.setResizable(false);
 		pacFrame.setVisible(true);
 	}
+	private class MoveAction extends AbstractAction{
+		int direction;
+		Pacman player;
+		MoveAction(int direction, Pacman player){
+			System.out.println("HI");
+			this.direction=direction;
+			this.player=player;
+		}
+		public void actionPerformed(ActionEvent e) {
+			if(direction==1){
+				if(grid.isValid(player.getPositions()[0]+1, player.getPositions()[1])){
+					player.setDirection(direction);
+				}
+			}else if(direction==2){
+				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]-1)){
+					player.setDirection(direction);
+				}	
+			}else if(direction==3){
+				if(grid.isValid(player.getPositions()[0]-1, player.getPositions()[1])){
+					player.setDirection(direction);
+				}	
+			}else if(direction==4){
+				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]+1)){
+					player.setDirection(direction);
+				}	
+			}else{}
+			
+		}
+	}
 	public void fillGraphicalGrid(Graphics g){
 			for(int i=1; i<=26; i++){
 				for(int j=1; j<=14; j++){
 					if(grid.getTackStatus(i, j)==1){
-						g.drawImage(littleTac, (int)(i*19.6)+70, (int)(j*20.2)+7, this);
+						g.drawImage(littleTac, (int)(i*19.5)+73, (int)(j*20.1)+7, this);
 					}else if(grid.getTackStatus(i, j)==2){
-						g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+7, this);
+						g.drawImage(bigTac, (int)(i*19.5)+70, (int)(j*20.1)+7, this);
 					}else{}
 				}
 			}
@@ -56,7 +96,7 @@ public class GraphicalGrid extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, this);
-		g.drawImage(p.getPicture(), (int)((p.getPositions()[0]*19.6)+70),(int)((p.getPositions()[1]*20.2)+7), this);
+		g.drawImage(p.getPicture(), (int)((p.getPositions()[0]*19.4)+68),(int)((p.getPositions()[1]*20)+2), this);
 		fillGraphicalGrid(g);
 
 	}
@@ -65,9 +105,10 @@ public class GraphicalGrid extends JPanel{
 	public static void main(String[] args) {
 		GraphicalGrid g=new GraphicalGrid();
 		for(int x = 0; x < 1000; x++){
-			p.move();
+			
 			try {
-				Thread.sleep(1000);
+				p.move();
+				Thread.sleep(500);
 				g.repaint();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
