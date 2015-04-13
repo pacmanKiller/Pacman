@@ -1,6 +1,11 @@
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 
 public class Pacman {
@@ -20,6 +25,10 @@ public class Pacman {
 		grid = g;
 		g.setPacman(this);
 	}
+	public void setDirection(int direction){
+		this.direction=direction;
+	}
+
 	private int[] nextLocation(){
 		if(direction == RIGHT){
 			int[] ret = {xLoc+1,yLoc};
@@ -44,20 +53,27 @@ public class Pacman {
 		return ret;
 	}
 	public void move(){
+		final int currentDirection=direction;
 		if(grid.isValid(nextLocation()[0], nextLocation()[1])){
 			superPower = grid.eat(nextLocation()[0], nextLocation()[1]);
 			xLoc = nextLocation()[0];
 			yLoc = nextLocation()[1];
 			setPicture();
 		}else{
-			direction = (int)(Math.random()*4+1);
+			//			direction = (int)(Math.random()*4+1);
+			while(currentDirection==direction){
+//				doNothing();
+//				System.out.println(direction);
+				System.out.println(direction);
+			}
 			setPicture();
-			System.out.println(nextLocation()[0] + " " + nextLocation()[1] + " " + direction);
+			//			System.out.println(nextLocation()[0] + " " + nextLocation()[1] + " " + direction);
 			move();
 		}
 		//System.out.println(xLoc + " " + yLoc);
 		//grid.printGrid();
 	}
+	public void doNothing(){}
 	public void setPicture(){
 		String picDirection = "";
 		switch(direction){
@@ -72,7 +88,12 @@ public class Pacman {
 		else
 			picMouth = "MouthClosed.png";
 		mouth = !mouth;
-		pacPic = ImageIO.read(new File(picDirection + picMouth));
+		try {
+			pacPic = ImageIO.read(new File(picDirection + picMouth));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public BufferedImage getPicture(){
 		return pacPic;
