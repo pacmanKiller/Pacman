@@ -1,128 +1,156 @@
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
+import javax.swing.*;
 
 
-public class Pacman {
-	private Grid grid;
-	public boolean superPower = false;
-	private BufferedImage pacPic = null;
-	private boolean mouth = true;;
-	private int xLoc, yLoc;
-	private int direction = 1;
-	public final int RIGHT = 1;
-	public final int UP = 2;
-	public final int LEFT = 3;
-	public final int DOWN = 4;
-	String picDirection = "";
-	double skewConstant=0;
-	public Pacman(int xStart, int yStart, Grid g){
-		xLoc = xStart;
-		yLoc = yStart;
-		grid = g;
-		g.setPacman(this);
-	}
-	public void setDirection(int direction){
-		this.direction=direction;
-	}
-	public int getDirection(){
-		return direction;
-	}
-	public double getSkewConstant(){
-		return skewConstant;
-	}
-	public void setSkewConstant(double skew){
-		skewConstant=skew;
-	}
-	private int[] nextLocation(){
-		if(direction == RIGHT){
-			int[] ret = {xLoc+1,yLoc};
-			return ret;
+public class GraphicalGrid extends JPanel{
+	BufferedImage image, littleTac, bigTac,pacman;
+	JFrame pacFrame;
+	boolean gridFilled;
+	static Grid grid;
+	static Pacman p;
+	
+	private Timer mouthTimer=new Timer(100, new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			p.toggleMouth();
+			p.setPicture();
+			
+			repaint();
 		}
-		if(direction == LEFT){
-			int[] ret = {xLoc-1,yLoc};
-			return ret;
-		}
-		if(direction == UP){
-			int[] ret = {xLoc,yLoc-1};
-			return ret;
-		}
-		if(direction == DOWN){
-			int[] ret = {xLoc,yLoc+1};
-			return ret;
-		}
-		return null;
-	}
-	public int[] getPositions(){
-		int[] ret = {xLoc,yLoc};
-		return ret;
-	}
-	public void toggleMouth(){
-		mouth = !mouth;
-	}
-	public void move(){
-		final int currentDirection=direction;
-		if(grid.isValid(nextLocation()[0], nextLocation()[1])){
-			superPower = grid.eat(nextLocation()[0], nextLocation()[1]);
-			xLoc = nextLocation()[0];
-			yLoc = nextLocation()[1];
-			skewConstant=0;
-			setPicture();
-		}else{
-			//			direction = (int)(Math.random()*4+1);
-			while(currentDirection==direction){
-//				doNothing();
+	});
+	private Timer skewTimer=new Timer(10, new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			if(p.getDirection()==1){
+				p.setHorSkewConstant(p.getHorSkewConstant()+.7);
+			}else if(p.getDirection()==2){
+				p.setVertSkewConstant(p.getVertSkewConstant()-.7);
+			}else if(p.getDirection()==3){
+				p.setHorSkewConstant(p.getHorSkewConstant()-.7);
+			}else if(p.getDirection()==4){
+				p.setVertSkewConstant(p.getVertSkewConstant()+.7);
 			}
-			setPicture();
-			//			System.out.println(nextLocation()[0] + " " + nextLocation()[1] + " " + direction);
-			move();
+			repaint();
 		}
-		//System.out.println(xLoc + " " + yLoc);
-		//grid.printGrid();
-	}
-	public void doNothing(){}
-	public void setPicture(){
-		String picMouth;
-		if(mouth)
-			picMouth = "MouthOpen.png";
-		else
-			picMouth = "MouthClosed.png";
-		switch(direction){
-		case DOWN: picDirection = "DownPacman"; break;
-		case UP: picDirection = "UpPacman"; break;
-		case LEFT: picDirection = "LeftPacman"; break;
-		case RIGHT: picDirection = "RightPacman"; break;
-		}
+	});
+	GraphicalGrid(){
+		mouthTimer.start();
+		skewTimer.start();
+		grid=new Grid();
+		p=new Pacman(13, 17, grid);
 		try {
-			pacPic = ImageIO.read(new File(picDirection + picMouth));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
+			littleTac = ImageIO.read(new File("LittleTac.png"));
+			bigTac=ImageIO.read(new File("BigTac.png"));
+			pacman = ImageIO.read(new File("LeftPacmanMouthOpen.png"));
+		} catch (IOException e1) {
 		}
-		
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP,0), "face up");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,0), "face down");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,0), "face left");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,0), "face right");
+		this.getActionMap().put("face up", new MoveAction(2, p));
+		this.getActionMap().put("face down", new MoveAction(4, p));
+		this.getActionMap().put("face left", new MoveAction(3, p));
+		this.getActionMap().put("face right", new MoveAction(1, p));
+		pacFrame=new JFrame();
+		pacFrame.setContentPane(this);
+		pacFrame.setTitle("Pacman");
+		pacFrame.setSize(650, 657);
+		pacFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pacFrame.setResizable(false);
+		pacFrame.setVisible(true);
 	}
-	public boolean getMouth(){
-		return mouth;
+	
+	public Pacman getPacman(){
+		return p;
 	}
-	public BufferedImage getPicture(){
-		return pacPic;
+	private class MoveAction extends AbstractAction{
+		int direction;
+		Pacman player;
+		MoveAction(int direction, Pacman player){
+			this.direction=direction;
+			this.player=player;
+		}
+		public void actionPerformed(ActionEvent e) {
+			if(direction==1){
+				if(grid.isValid(player.getPositions()[0]+1, player.getPositions()[1])){
+					player.setDirection(direction);
+					player.setPicture();
+				}
+			}else if(direction==2){
+				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]-1)){
+					player.setDirection(direction);
+					player.setPicture();
+				}	
+			}else if(direction==3){
+				if(grid.isValid(player.getPositions()[0]-1, player.getPositions()[1])){
+					player.setDirection(direction);
+					player.setPicture();
+				}	
+			}else if(direction==4){
+				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]+1)){
+					player.setDirection(direction);
+					player.setPicture();
+				}	
+			}else{}
+			
+		}
 	}
-	public static void main(String[] args){
-		Grid g = new Grid();
-		Pacman p = new Pacman(13, 17, g);
+	public void fillGraphicalGrid(Graphics g){
+			for(int i=1; i<=26; i++){
+				for(int j=1; j<=14; j++){
+					if(grid.getTackStatus(i, j)==1){
+						g.drawImage(littleTac, (int)(i*19.5)+73, (int)(j*20.1)+7, this);
+					}else if(grid.getTackStatus(i, j)==2){
+						g.drawImage(bigTac, (int)(i*19.5)+70, (int)(j*20.1)+7, this);
+					}else{}
+				}
+			}
+			for(int i=1; i<=26; i++){
+				for(int j=15; j<=28; j++){
+					if(grid.getTackStatus(i, j)==1){
+						g.drawImage(littleTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+
+					}else if(grid.getTackStatus(i, j)==2){
+						g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+
+					}else{}
+				}
+			}
+	}
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		g.drawImage(image, 0, 0, this);
+		g.drawImage(p.getPicture(), (int)((int)((p.getPositions()[0]*19.4)+68)+p.getHorSkewConstant()),(int)((int)((p.getPositions()[1]*20)+2)+p.getVertSkewConstant()), this);
+		g.setColor(Color.white);
+		g.drawString("Score: "+grid.getScore(), 20, 620);
+		fillGraphicalGrid(g);
+
+	}
+
+	
+	public static void main(String[] args) {
+		GraphicalGrid g=new GraphicalGrid();
 		for(int x = 0; x < 1000; x++){
+			
 			try {
-				Thread.sleep(1000);
+				p.move();
+				Thread.sleep(500);
+				p.setPicture();
+				g.repaint();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			p.move();
-			g.printGrid();
+			
 		}
+		
 	}
+
 }
