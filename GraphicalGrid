@@ -16,34 +16,37 @@ public class GraphicalGrid extends JPanel{
 	boolean gridFilled;
 	static Grid grid;
 	static Pacman p;
-	
+
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			p.toggleMouth();
-			p.setPicture();
-			
-			repaint();
+			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1])){
+				p.toggleMouth();
+				p.setPicture();
+				repaint();
+			}
 		}
 	});
-	private Timer skewTimer=new Timer(10, new ActionListener(){
+	private Timer skewTimer=new Timer(15, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			if(p.getDirection()==1){
-				p.setHorSkewConstant(p.getHorSkewConstant()+.7);
-			}else if(p.getDirection()==2){
-				p.setVertSkewConstant(p.getVertSkewConstant()-.7);
-			}else if(p.getDirection()==3){
-				p.setHorSkewConstant(p.getHorSkewConstant()-.7);
-			}else if(p.getDirection()==4){
-				p.setVertSkewConstant(p.getVertSkewConstant()+.7);
+			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1])){
+				if(p.getDirection()==1){
+					p.setHorSkewConstant(p.getHorSkewConstant()+.6);
+				}else if(p.getDirection()==2){
+					p.setVertSkewConstant(p.getVertSkewConstant()-.6);
+				}else if(p.getDirection()==3){
+					p.setHorSkewConstant(p.getHorSkewConstant()-.6);
+				}else if(p.getDirection()==4){
+					p.setVertSkewConstant(p.getVertSkewConstant()+.6);
+				}
+				repaint();
 			}
-			repaint();
 		}
 	});
 	GraphicalGrid(){
 		mouthTimer.start();
 		skewTimer.start();
 		grid=new Grid();
-		p=new Pacman(13, 17, grid);
+		p=new Pacman(15, 22, grid);
 		try {
 			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
 			littleTac = ImageIO.read(new File("LittleTac.png"));
@@ -67,7 +70,7 @@ public class GraphicalGrid extends JPanel{
 		pacFrame.setResizable(false);
 		pacFrame.setVisible(true);
 	}
-	
+
 	public Pacman getPacman(){
 		return p;
 	}
@@ -100,30 +103,30 @@ public class GraphicalGrid extends JPanel{
 					player.setPicture();
 				}	
 			}else{}
-			
+
 		}
 	}
 	public void fillGraphicalGrid(Graphics g){
-			for(int i=1; i<=26; i++){
-				for(int j=1; j<=14; j++){
-					if(grid.getTackStatus(i, j)==1){
-						g.drawImage(littleTac, (int)(i*19.5)+73, (int)(j*20.1)+7, this);
-					}else if(grid.getTackStatus(i, j)==2){
-						g.drawImage(bigTac, (int)(i*19.5)+70, (int)(j*20.1)+7, this);
-					}else{}
-				}
+		for(int i=1; i<=26; i++){
+			for(int j=1; j<=14; j++){
+				if(grid.getTackStatus(i, j)==1){
+					g.drawImage(littleTac, (int)(i*19.5)+73, (int)(j*20.1)+7, this);
+				}else if(grid.getTackStatus(i, j)==2){
+					g.drawImage(bigTac, (int)(i*19.5)+70, (int)(j*20.1)+7, this);
+				}else{}
 			}
-			for(int i=1; i<=26; i++){
-				for(int j=15; j<=28; j++){
-					if(grid.getTackStatus(i, j)==1){
-						g.drawImage(littleTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+		}
+		for(int i=1; i<=26; i++){
+			for(int j=15; j<=28; j++){
+				if(grid.getTackStatus(i, j)==1){
+					g.drawImage(littleTac, (int)(i*19.6)+73, (int)(j*20.2)+9, this);
 
-					}else if(grid.getTackStatus(i, j)==2){
-						g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
+				}else if(grid.getTackStatus(i, j)==2){
+					g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
 
-					}else{}
-				}
+				}else{}
 			}
+		}
 	}
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -135,11 +138,11 @@ public class GraphicalGrid extends JPanel{
 
 	}
 
-	
+
 	public static void main(String[] args) {
 		GraphicalGrid g=new GraphicalGrid();
 		for(int x = 0; x < 1000; x++){
-			
+
 			try {
 				p.move();
 				Thread.sleep(500);
@@ -148,9 +151,8 @@ public class GraphicalGrid extends JPanel{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-		}
-		
-	}
 
+		}
+
+	}
 }
