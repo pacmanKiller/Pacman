@@ -1,9 +1,3 @@
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 
 public abstract class Character {
 	private Grid grid;
@@ -15,12 +9,17 @@ public abstract class Character {
 	public final int UP = 2;
 	public final int LEFT = 3;
 	public final int DOWN = 4;
+	private String name;
 	double horSkewConstant=0;
 	double vertSkewConstant=0;
-	public Character(int xStart, int yStart, Grid g){
+	public Character(int xStart, int yStart, Grid g, String n){
 		xLoc = xStart;
 		yLoc = yStart;
 		grid = g;
+		name = n;
+	}
+	public String getName(){
+		return name;
 	}
 	public Grid getGrid(){
 		return grid;
