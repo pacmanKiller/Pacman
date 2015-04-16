@@ -15,8 +15,6 @@ public class Pacman extends Character{
 	public final int LEFT = 3;
 	public final int DOWN = 4;
 	String picDirection = "";
-	double horSkewConstant=0;
-	double vertSkewConstant=0;
 	public Pacman(int xStart, int yStart, Grid g){
 		super(xStart, yStart, g, "pacman");
 	}
