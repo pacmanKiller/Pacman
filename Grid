@@ -1,8 +1,10 @@
 public class Grid {
 	private boolean[][] validSpaces;
 	private int[][] ticTacs;
+	private Pacman pac = null;
 	final int xSize = 26;
 	final int ySize = 28;
+	int score;
 	public Grid(){
 		validSpaces = new boolean[xSize][ySize];
 		ticTacs = new int[xSize][ySize];
@@ -13,6 +15,12 @@ public class Grid {
 			}
 		}
 		fillGrids();
+	}
+	public void setPacman(Pacman p){
+		pac = p;
+	}
+	public int getScore(){
+		return score;
 	}
 	private void fillGrids(){
 		fillHorizontal(1,1,12,true);
@@ -90,27 +98,32 @@ public class Grid {
 	}
 	public boolean eat(int x, int y){
 		boolean ret = (ticTacs[x-1][y-1] == 2);
+		if(ticTacs[x-1][y-1] == 2){
+			score+=500;
+		}else if(ticTacs[x-1][y-1] == 1){
+			score+=100;
+		}
 		ticTacs[x-1][y-1] = 0;
 		return ret;
 	}
-//	public void printGrid(){
-//		for(int y = 0; y < ySize; y++){
-//			for(int x = 0; x < xSize; x++){
-//				if(validSpaces[x][y]){
-//					if(pac != null && pac.getPositions()[0]-1  == x && pac.getPositions()[1]-1 == y)
-//						System.out.print("P ");
-//					else{
-//						switch(ticTacs[x][y]){
-//						case 0: System.out.print("N "); break;
-//						case 1: System.out.print("L "); break;
-//						case 2: System.out.print("B "); break;
-//					}
-//					}
-//				}else{
-//					System.out.print("  ");
-//				}	
-//			}
-//			System.out.print("\n");
-//		}
-//	}
+	public void printGrid(){
+		for(int y = 0; y < ySize; y++){
+			for(int x = 0; x < xSize; x++){
+				if(validSpaces[x][y]){
+					if(pac != null && pac.getPositions()[0]-1  == x && pac.getPositions()[1]-1 == y)
+						System.out.print("P ");
+					else{
+						switch(ticTacs[x][y]){
+						case 0: System.out.print("N "); break;
+						case 1: System.out.print("L "); break;
+						case 2: System.out.print("B "); break;
+					}
+					}
+				}else{
+					System.out.print("  ");
+				}	
+			}
+			System.out.print("\n");
+		}
+	}
 }
