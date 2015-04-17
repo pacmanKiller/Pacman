@@ -19,7 +19,7 @@ public class GraphicalGrid extends JPanel{
 
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1])){
+			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1]) == 1){
 				p.toggleMouth();
 				p.setPicture();
 				repaint();
@@ -28,7 +28,7 @@ public class GraphicalGrid extends JPanel{
 	});
 	private Timer skewTimer=new Timer(15, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1])){
+			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1]) == 1){
 				if(p.getDirection()==1){
 					p.setHorSkewConstant(p.getHorSkewConstant()+.6);
 				}else if(p.getDirection()==2){
@@ -83,22 +83,22 @@ public class GraphicalGrid extends JPanel{
 		}
 		public void actionPerformed(ActionEvent e) {
 			if(direction==1){
-				if(grid.isValid(player.getPositions()[0]+1, player.getPositions()[1])){
+				if(grid.isValid(player.getPositions()[0]+1, player.getPositions()[1]) == 1){
 					player.setDirection(direction);
 					player.setPicture();
 				}
 			}else if(direction==2){
-				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]-1)){
+				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]-1) == 1){
 					player.setDirection(direction);
 					player.setPicture();
 				}	
 			}else if(direction==3){
-				if(grid.isValid(player.getPositions()[0]-1, player.getPositions()[1])){
+				if(grid.isValid(player.getPositions()[0]-1, player.getPositions()[1]) == 1){
 					player.setDirection(direction);
 					player.setPicture();
 				}	
 			}else if(direction==4){
-				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]+1)){
+				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]+1) == 1){
 					player.setDirection(direction);
 					player.setPicture();
 				}	
