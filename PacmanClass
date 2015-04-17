@@ -20,13 +20,21 @@ public class Pacman extends Character{
 	}
 	public void move(){
 		int currentDirection=getDirection();
-		if(getGrid().isValid(nextLocation()[0], nextLocation()[1])){
+		System.out.println(getGrid().isValid(nextLocation()[0], nextLocation()[1]) + " " + nextLocation()[0] + " " + nextLocation()[1]);
+		if(getGrid().isValid(nextLocation()[0], nextLocation()[1]) == 1){
 			superPower = getGrid().eat(nextLocation()[0], nextLocation()[1]);
 			setXLoc(nextLocation()[0]);
 			setYLoc(nextLocation()[1]);
 			setPicture();
 			setHorSkewConstant(0);
 			setVertSkewConstant(0);
+		if(getGrid().isValid(nextLocation()[0], nextLocation()[1]) == 2){
+			setYLoc(nextLocation()[1]);
+			if(nextLocation()[0] == 1)
+				setXLoc(26);
+			else
+				setXLoc(1);
+		}
 		}else{
 			//			direction = (int)(Math.random()*4+1);
 			while(currentDirection==getDirection()){
@@ -39,9 +47,7 @@ public class Pacman extends Character{
 		//System.out.println(xLoc + " " + yLoc);
 		//grid.printGrid();
 	}
-	public void doNothing(){}
 	public void setPicture(){
-		
 		String picMouth;
 		if(getImageShift())
 			picMouth = "MouthOpen.png";
