@@ -14,7 +14,7 @@ public class GraphicalGrid extends JPanel{
 	BufferedImage image, littleTac, bigTac,pacman;
 	JFrame pacFrame;
 	boolean gridFilled;
-	static Grid grid;
+	Grid grid;
 	static Pacman p;
 
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
@@ -46,7 +46,7 @@ public class GraphicalGrid extends JPanel{
 		mouthTimer.start();
 		skewTimer.start();
 		grid=new Grid();
-		p=new Pacman(15, 22, grid);
+		p=new Pacman(15, 23, grid);
 		try {
 			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
 			littleTac = ImageIO.read(new File("LittleTac.png"));
@@ -108,22 +108,11 @@ public class GraphicalGrid extends JPanel{
 	}
 	public void fillGraphicalGrid(Graphics g){
 		for(int i=1; i<=26; i++){
-			for(int j=1; j<=14; j++){
+			for(int j=1; j<=29; j++){
 				if(grid.getTackStatus(i, j)==1){
-					g.drawImage(littleTac, (int)(i*19.5)+73, (int)(j*20.1)+7, this);
+					g.drawImage(littleTac, (int)(i*19.4)+74, (int)(j*19.4)+10, this);
 				}else if(grid.getTackStatus(i, j)==2){
-					g.drawImage(bigTac, (int)(i*19.5)+70, (int)(j*20.1)+7, this);
-				}else{}
-			}
-		}
-		for(int i=1; i<=26; i++){
-			for(int j=15; j<=28; j++){
-				if(grid.getTackStatus(i, j)==1){
-					g.drawImage(littleTac, (int)(i*19.6)+73, (int)(j*20.2)+9, this);
-
-				}else if(grid.getTackStatus(i, j)==2){
-					g.drawImage(bigTac, (int)(i*19.6)+70, (int)(j*20.2)+9, this);
-
+					g.drawImage(bigTac, (int)(i*19.4)+70, (int)(j*19.4)+8, this);
 				}else{}
 			}
 		}
@@ -132,13 +121,13 @@ public class GraphicalGrid extends JPanel{
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, this);
 		fillGraphicalGrid(g);
-		g.drawImage(p.getPicture(), (int)((int)((p.getPositions()[0]*19.4)+68)+p.getHorSkewConstant()),(int)((int)((p.getPositions()[1]*20)+2)+p.getVertSkewConstant()), this);
+		g.drawImage(p.getPicture(), (int)((int)((p.getPositions()[0]*19.4)+68)+p.getHorSkewConstant()),(int)((int)((p.getPositions()[1]*19.4)+2)+p.getVertSkewConstant()), this);
 		g.setColor(Color.white);
 		g.drawString("Score: "+grid.getScore(), 20, 620);
 		
 
 	}
-
+	
 
 	public static void main(String[] args) {
 		GraphicalGrid g=new GraphicalGrid();
@@ -147,12 +136,12 @@ public class GraphicalGrid extends JPanel{
 			try {
 				p.move();
 				Thread.sleep(500);
-				p.setPicture();
-				g.repaint();
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
+			p.setPicture();
+			g.repaint();
 		}
 
 	}
