@@ -86,7 +86,7 @@ public class Grid {
 		}
 	}
 	public int isValid(int x, int y){
-		if(y == 13 && (x == 1 || x == 26))
+		if(y == 14 && (x == 1 || x == 26))
 			return 2;
 		if(x <= xSize && y <= ySize && x > 0 && y > 0 && validSpaces[x-1][y-1])
 			return 1;
