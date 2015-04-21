@@ -2,7 +2,7 @@ public class Grid {
 	private boolean[][] validSpaces;
 	private int[][] ticTacs;
 	final int xSize = 26;
-	final int ySize = 28;
+	final int ySize = 29;
 	int score;
 	public Grid(){
 		validSpaces = new boolean[xSize][ySize];
@@ -22,10 +22,10 @@ public class Grid {
 		fillHorizontal(1,1,12,true);
 		fillHorizontal(15,1,12,true);
 		fillVertical(1,1,8,true);
-		fillVertical(1,6,25,true);
+		fillVertical(1,6,26,true);
 		fillVertical(1,12,5,true);
 		fillVertical(1,15,5,true);
-		fillVertical(1,21,25,true);
+		fillVertical(1,21,26,true);
 		fillVertical(1,26,8,true);
 		fillHorizontal(1,5,26,true);
 		fillVertical(5,9,4,true);
@@ -37,35 +37,35 @@ public class Grid {
 		fillVertical(9,15,2,false);
 		fillVertical(9,12,2,false);
 		fillHorizontal(9,10,10,false);
-		fillVertical(10,9,9,false);
-		fillVertical(10,18,9,false);
-		fillHorizontal(1,13,9,false);
-		fillHorizontal(18,13,9,false);
-		fillHorizontal(9,17,10,false);
-		fillHorizontal(1,19,12,true);
-		fillHorizontal(15,19,12,true);
-		fillVertical(19,1,4,true);
-		fillVertical(19,12,4,true);
-		fillVertical(19,15,4,true);
-		fillVertical(19,26,4,true);
-		fillHorizontal(1,22,3,true);
-		fillHorizontal(6,22,16,true);
-		fillHorizontal(24,22,3,true);
-		fillVertical(22,3,4,true);
-		fillVertical(22,9,4,true);
-		fillVertical(22,18,4,true);
-		fillVertical(22,24,4,true);
-		fillHorizontal(1,25,6,true);
-		fillHorizontal(9,25,4,true);
-		fillHorizontal(15,25,4,true);
-		fillHorizontal(21,25,6,true);
-		fillVertical(25,1,4,true);
-		fillVertical(25,12,4,true);
-		fillVertical(25,15,4,true);
-		fillVertical(25,26,4,true);
-		fillHorizontal(1,28,26,true);
-		fillHorizontal(1,14,6, false);
-		fillHorizontal(20,14,6, false);
+		fillVertical(10,9,10,false);
+		fillVertical(10,18,10,false);
+		fillHorizontal(1,14,9,false);
+		fillHorizontal(18,14,9,false);
+		fillHorizontal(9,18,10,false);
+		fillHorizontal(1,20,12,true);
+		fillHorizontal(15,20,12,true);
+		fillVertical(20,1,4,true);
+		fillVertical(20,12,4,true);
+		fillVertical(20,15,4,true);
+		fillVertical(20,26,4,true);
+		fillHorizontal(1,23,3,true);
+		fillHorizontal(6,23,16,true);
+		fillHorizontal(24,23,3,true);
+		fillVertical(23,3,4,true);
+		fillVertical(23,9,4,true);
+		fillVertical(23,18,4,true);
+		fillVertical(23,24,4,true);
+		fillHorizontal(1,26,6,true);
+		fillHorizontal(9,26,4,true);
+		fillHorizontal(15,26,4,true);
+		fillHorizontal(21,26,6,true);
+		fillVertical(26,1,4,true);
+		fillVertical(26,12,4,true);
+		fillVertical(26,15,4,true);
+		fillVertical(26,26,4,true);
+		fillHorizontal(1,29,26,true);
+		//fillHorizontal(1,14,6, false);
+		//fillHorizontal(20,14,6, false);
 		ticTacs[0][2] = 2;
 		ticTacs[25][2] = 2;
 		ticTacs[0][21] = 2;
@@ -86,7 +86,7 @@ public class Grid {
 		}
 	}
 	public int isValid(int x, int y){
-		if(y == 14 && (x == 1 || x == 26))
+		if(y == 13 && (x == 1 || x == 26))
 			return 2;
 		if(x <= xSize && y <= ySize && x > 0 && y > 0 && validSpaces[x-1][y-1])
 			return 1;
@@ -106,24 +106,24 @@ public class Grid {
 		ticTacs[x-1][y-1] = 0;
 		return ret;
 	}
-//	public void printGrid(){
-//		for(int y = 0; y < ySize; y++){
-//			for(int x = 0; x < xSize; x++){
-//				if(validSpaces[x][y]){
-//					if(pac != null && pac.getPositions()[0]-1  == x && pac.getPositions()[1]-1 == y)
-//						System.out.print("P ");
-//					else{
-//						switch(ticTacs[x][y]){
-//						case 0: System.out.print("N "); break;
-//						case 1: System.out.print("L "); break;
-//						case 2: System.out.print("B "); break;
-//					}
-//					}
-//				}else{
-//					System.out.print("  ");
-//				}	
-//			}
-//			System.out.print("\n");
-//		}
-//	}
+	public void printGrid(){
+		for(int y = 0; y < ySize; y++){
+			for(int x = 0; x < xSize; x++){
+				if(validSpaces[x][y]){
+					switch(ticTacs[x][y]){
+					case 0: System.out.print("N "); break;
+					case 1: System.out.print("L "); break;
+					case 2: System.out.print("B "); break;
+					}
+				}else{
+					System.out.print("  ");
+				}	
+			}
+			System.out.print("\n");
+		}
+	}
+	public static void main(String[] args){
+		Grid g = new Grid();
+		g.printGrid();
+	}
 }
