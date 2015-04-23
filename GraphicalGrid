@@ -16,11 +16,13 @@ public class GraphicalGrid extends JPanel{
 	boolean gridFilled;
 	Grid grid;
 	static Pacman p;
+	static Ghost ghost;
 
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
 			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1]) == 1){
 				p.toggleMouth();
+				ghost.setPicture();
 				p.setPicture();
 				repaint();
 			}
@@ -47,6 +49,7 @@ public class GraphicalGrid extends JPanel{
 		skewTimer.start();
 		grid=new Grid();
 		p=new Pacman(15, 23, grid);
+		ghost=new Ghost(1, 1, grid, "Mwahaha");
 		try {
 			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
 			littleTac = ImageIO.read(new File("LittleTac.png"));
@@ -85,22 +88,18 @@ public class GraphicalGrid extends JPanel{
 			if(direction==1){
 				if(grid.isValid(player.getPositions()[0]+1, player.getPositions()[1]) == 1){
 					player.setDirection(direction);
-					player.setPicture();
 				}
 			}else if(direction==2){
 				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]-1) == 1){
 					player.setDirection(direction);
-					player.setPicture();
 				}	
 			}else if(direction==3){
 				if(grid.isValid(player.getPositions()[0]-1, player.getPositions()[1]) == 1){
 					player.setDirection(direction);
-					player.setPicture();
 				}	
 			}else if(direction==4){
 				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]+1) == 1){
 					player.setDirection(direction);
-					player.setPicture();
 				}	
 			}else{}
 
@@ -122,6 +121,7 @@ public class GraphicalGrid extends JPanel{
 		g.drawImage(image, 0, 0, this);
 		fillGraphicalGrid(g);
 		g.drawImage(p.getPicture(), (int)((int)((p.getPositions()[0]*19.4)+68)+p.getHorSkewConstant()),(int)((int)((p.getPositions()[1]*19.4)+2)+p.getVertSkewConstant()), this);
+		g.drawImage(ghost.getPicture(), (int)((int)((ghost.getPositions()[0]*19.4)+68)+ghost.getHorSkewConstant()),(int)((int)((ghost.getPositions()[1]*19.4)+2)+ghost.getVertSkewConstant()), this);
 		g.setColor(Color.white);
 		g.drawString("Score: "+grid.getScore(), 20, 620);
 		
@@ -135,14 +135,13 @@ public class GraphicalGrid extends JPanel{
 
 			try {
 				p.move();
+				ghost.move();
 				Thread.sleep(500);
 				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			p.setPicture();
 			g.repaint();
 		}
-
 	}
 }
