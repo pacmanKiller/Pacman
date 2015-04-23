@@ -109,9 +109,9 @@ public class GraphicalGrid extends JPanel{
 		for(int i=1; i<=26; i++){
 			for(int j=1; j<=29; j++){
 				if(grid.getTackStatus(i, j)==1){
-					g.drawImage(littleTac, (int)(i*19.4)+74, (int)(j*19.4)+10, this);
+					g.drawImage(littleTac, (int)(i*19.7)+74, (int)(j*19.4)+10, this);
 				}else if(grid.getTackStatus(i, j)==2){
-					g.drawImage(bigTac, (int)(i*19.4)+70, (int)(j*19.4)+8, this);
+					g.drawImage(bigTac, (int)(i*19.7)+70, (int)(j*19.4)+8, this);
 				}else{}
 			}
 		}
