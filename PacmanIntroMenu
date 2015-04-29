@@ -14,7 +14,22 @@ public class PacmanIntroMenu extends JPanel {
 	BufferedImage image;
 	BufferedImage titleImage;
 	BufferedImage imageCheck;
+	GraphicalGrid g;
+	JPanel thisOne=this;
+	JFrame pacFrame;
+	boolean resetBoolean;
+	boolean startGame = false;
+	int timeSlice=500;
+	public Timer changeCheckTimer=new Timer(timeSlice, new ActionListener(){
+		public void actionPerformed(ActionEvent arg0) {
+			g.play();
+		}
+	});
+	public void setTimeSlice(int slice){
+		timeSlice=slice;
+	}
 	public PacmanIntroMenu(){
+		
 		pacmanFrame=new JFrame();
 		try {
 			image = ImageIO.read(new File("pacmanBackground.png"));
@@ -29,20 +44,13 @@ public class PacmanIntroMenu extends JPanel {
 		quitButton=new JButton("Quit");
 		storeButton=new JButton("Upgrade Store");
 		pacmanFrame.setContentPane(this);
-		startButton.addActionListener(new ActionListener(){
-
-			public void actionPerformed(ActionEvent arg0) {
-				Grid grid=new Grid();
-				grid.printGrid();
-				pacmanFrame.dispatchEvent(new WindowEvent(pacmanFrame, WindowEvent.WINDOW_CLOSING));
-			}
-
-		});
+		startButton.addActionListener(new StartButtonListener());
 		quitButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				pacmanFrame.dispatchEvent(new WindowEvent(pacmanFrame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
+		storeButton.addActionListener(new StoreButtonListener());
 		c.fill= GridBagConstraints.CENTER;
 		c.gridx = 0;
 		c.gridy = 10;
@@ -61,7 +69,58 @@ public class PacmanIntroMenu extends JPanel {
 		pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pacmanFrame.setVisible(true);
 	}
+	public int getTimeSlice(){
+		return timeSlice;
+	}
+	public class StartButtonListener implements ActionListener{
 
+		public void actionPerformed(ActionEvent arg0) {
+			resetBoolean=true;
+			checkForTrue();
+		}
+		
+	}
+	public class StoreButtonListener implements ActionListener{
+
+		public void actionPerformed(ActionEvent e) {
+			pacmanFrame.dispose();
+			pacmanFrame=new JFrame();
+			pacmanFrame.setContentPane(new StorePanel());
+			pacmanFrame.setTitle("Upgrade Store");
+			pacmanFrame.setSize(650, 657);
+			pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			pacmanFrame.setResizable(false);
+			pacmanFrame.setVisible(true);
+		}
+		
+	}
+	public class StorePanel extends JPanel{
+		public StorePanel(){
+//			startButton.doClick();
+		}
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			g.setColor(Color.black);
+			g.fillRect(0, 0, 650, 657);
+		}
+	}
+	public void checkForTrue(){
+		if(resetBoolean){
+			g = new GraphicalGrid();
+			pacmanFrame.dispose();
+			pacmanFrame=new JFrame();
+			pacmanFrame.setContentPane(g);
+			pacmanFrame.setTitle("Pacman");
+			pacmanFrame.setSize(650, 657);
+			pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			pacmanFrame.setResizable(false);
+			pacmanFrame.setVisible(true);
+			startGame = true;
+			changeCheckTimer.start();
+			resetBoolean=false;
+		}
+	}
+	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, this);
