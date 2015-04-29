@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -123,13 +122,6 @@ public class GraphicalGrid extends JPanel{
 		this.getActionMap().put("face down", new MoveAction(4, p));
 		this.getActionMap().put("face left", new MoveAction(3, p));
 		this.getActionMap().put("face right", new MoveAction(1, p));
-		pacFrame=new JFrame();
-		pacFrame.setContentPane(this);
-		pacFrame.setTitle("Pacman");
-		pacFrame.setSize(650, 657);
-		pacFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pacFrame.setResizable(false);
-		pacFrame.setVisible(true);
 	}
 	public Pacman getPacman(){
 		return p;
@@ -162,90 +154,6 @@ public class GraphicalGrid extends JPanel{
 
 		}
 	}
-	public class PacmanIntroMenu extends JPanel {
-		JButton startButton, quitButton, storeButton;
-		JFrame pacmanFrame;
-		BufferedImage image;
-		BufferedImage titleImage;
-		BufferedImage imageCheck;
-		JPanel thisOne=this;
-		JFrame pacFrame;
-		
-		public PacmanIntroMenu(){
-			pacmanFrame=new JFrame();
-			try {
-				image = ImageIO.read(new File("pacmanBackground.png"));
-				titleImage=ImageIO.read(new File("pacmanTitle.jpg"));
-			} catch (IOException e1) {
-			}
-			GridBagLayout gridLayout=new GridBagLayout();
-			this.setLayout(gridLayout);
-			GridBagConstraints c=new GridBagConstraints();
-			
-			startButton=new JButton("Start Game");
-			quitButton=new JButton("Quit");
-			storeButton=new JButton("Upgrade Store");
-			pacmanFrame.setContentPane(this);
-			pacmanFrame.add(startButton);
-			startButton.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					GraphicalGrid g=new GraphicalGrid();
-					pacmanFrame.setContentPane(g);
-					g.play();
-//					pacFrame=new JFrame();
-//					pacFrame.setContentPane(g);
-//					pacFrame.setTitle("Pacman");
-//					pacFrame.setSize(650, 657);
-//					pacFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//					pacFrame.setResizable(false);
-//					pacFrame.setVisible(true);
-//					for(int x = 0; x < 1000; x++){
-	//
-//						try {
-//							g.getPacman().move();
-//							Thread.sleep(500);
-//							
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//						g.repaint();
-	//
-//					}
-//					
-				}
-
-			});
-			quitButton.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					pacmanFrame.dispatchEvent(new WindowEvent(pacmanFrame, WindowEvent.WINDOW_CLOSING));
-				}
-			});
-			c.fill= GridBagConstraints.CENTER;
-			c.gridx = 0;
-			c.gridy = 10;
-			this.add(startButton, c);
-			c.fill= GridBagConstraints.HORIZONTAL;
-			c.gridx = 0;
-			c.gridy = 12;
-			this.add(quitButton, c);
-			c.fill=GridBagConstraints.HORIZONTAL;
-			c.gridx=0;
-			c.gridy=11;
-			this.add(storeButton, c);
-			ImageIcon pacmanIcon=new ImageIcon("pacmanBackground.png");
-			pacmanFrame.setTitle("Start Menu");
-			pacmanFrame.setSize(575, 657);
-			pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			pacmanFrame.setVisible(true);
-		}
-
-		public void paintComponent(Graphics g){
-			super.paintComponent(g);
-			g.drawImage(image, 0, 0, this);
-			g.drawImage(titleImage, 130, 50, this);
-			g.drawImage(imageCheck, 120, 17, this);
-		}
-	}
 	public void fillGraphicalGrid(Graphics g){
 		for(int i=1; i<=26; i++){
 			for(int j=1; j<=29; j++){
@@ -268,64 +176,32 @@ public class GraphicalGrid extends JPanel{
 		g.drawImage(yellowGhost.getPicture(), (int)((int)((yellowGhost.getPositions()[0]*19.4)+68)+yellowGhost.getHorSkewConstant()),(int)((int)((yellowGhost.getPositions()[1]*19.4)+2)+yellowGhost.getVertSkewConstant()), this);
 		g.setColor(Color.white);
 		g.drawString("Score: "+grid.getScore(), 20, 620);
-		
+
 
 	}
-	
-	public void play(){
-		for(int x = 0; x < 1000; x++){
-			System.out.println("x");
-			try {
-				p.move();
-				repaint();
-				Thread.sleep(100);
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+	public boolean tacIteration(){
+		boolean ret = true;
+		for(int i=1; i<=26; i++){
+			for(int j=1; j<=29; j++){
+				if(grid.getTackStatus(i, j)!=0){
+					return false;
+				}
 			}
-			try {
-				redGhost.move();
-				pinkGhost.move();
-				tealGhost.move();
-				yellowGhost.move();
-				repaint();
-				Thread.sleep(400);
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			repaint();
 		}
+		return ret;
+	}
+
+	public void play(){
+		p.move();
+		repaint();
+		redGhost.move();
+		pinkGhost.move();
+		tealGhost.move();
+		yellowGhost.move();
+		repaint();
 	}
 	public static void main(String[] args) {
 		GraphicalGrid g=new GraphicalGrid();
-		g.new PacmanIntroMenu();
-//		GraphicalGrid g=new GraphicalGrid();
-//		g.play();
-//		for(int x = 0; x < 1000; x++){
-//
-//			try {
-//				p.move();
-//				g.repaint();
-//				Thread.sleep(100);
-//				
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			try {
-//				redGhost.move();
-//				pinkGhost.move();
-//				tealGhost.move();
-//				yellowGhost.move();
-//				g.repaint();
-//				Thread.sleep(400);
-//				
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//
-//			g.repaint();
-//		}
+		g.play();
 	}
 }
