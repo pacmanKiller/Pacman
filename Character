@@ -1,8 +1,10 @@
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 
 public abstract class Character {
@@ -95,6 +97,11 @@ public abstract class Character {
 	public int[] getPositions(){
 		int[] ret = {xLoc,yLoc};
 		return ret;
+	}
+	public boolean colliding(Character c){
+		if(Math.abs(c.getPositions()[0] - getPositions()[0])<=1 && Math.abs(c.getPositions()[1] - getPositions()[1])<=1)
+			return true;
+		return false;
 	}
 	public void toggleMouth(){
 		imageShift = !imageShift;
