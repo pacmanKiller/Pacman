@@ -198,6 +198,14 @@ public class GraphicalGrid extends JPanel{
 		pinkGhost.move();
 		tealGhost.move();
 		yellowGhost.move();
+		if(redGhost.colliding(p))
+			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
+		if(pinkGhost.colliding(p))
+			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
+		if(tealGhost.colliding(p))
+			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
+		if(yellowGhost.colliding(p))
+			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
 		repaint();
 	}
 	public static void main(String[] args) {
