@@ -55,6 +55,18 @@ public class Ghost extends Character{
 		}
 		return ret;
 	}
+	private String getDirectionPath(int direction){
+		if(direction==1){
+			return "Right";
+		}else if(direction==2){
+			return "Right";
+		}else if(direction==3){
+			return "Left";
+		}else if(direction==4){
+			return "Left";
+		}
+		return "";
+	}
 	private boolean oppositeDirection(int dir){
 		if(dir == Character.RIGHT && getDirection() == Character.LEFT)
 			return true;
@@ -68,7 +80,7 @@ public class Ghost extends Character{
 	}
 	public void setPicture(){
 		try {
-			passPicture(ImageIO.read(new File("LeftPacmanMouthClosed.png")));
+			passPicture(ImageIO.read(new File(color+getDirectionPath(getDirection())+"Ghost.png")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
