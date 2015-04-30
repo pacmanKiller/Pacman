@@ -98,7 +98,7 @@ public class PacmanIntroMenu extends JPanel {
 			g.fillRect(0, 0, 650, 657);
 			g.setColor(Color.green);
 			g.setFont(new Font("Serif", Font.BOLD, 36));
-			g.drawString("GAME OVER", 250, 300);
+			g.drawString("GAME OVER!", 220, 300);
 		}
 	}
 	public class StoreButtonListener implements ActionListener{
