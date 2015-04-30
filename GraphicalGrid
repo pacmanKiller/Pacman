@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class GraphicalGrid extends JPanel{
 	static Ghost pinkGhost;
 	static Ghost tealGhost;
 	static Ghost yellowGhost;
+	static boolean turnable = true;
 
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
@@ -39,12 +41,24 @@ public class GraphicalGrid extends JPanel{
 			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1]) == 1){
 				if(p.getDirection()==1){
 					p.setHorSkewConstant(p.getHorSkewConstant()+.6);
+					if(p.getHorSkewConstant() >= 4.8){
+						turnable = false;
+					}
 				}else if(p.getDirection()==2){
 					p.setVertSkewConstant(p.getVertSkewConstant()-.6);
+					if(p.getVertSkewConstant() <= -4.8){
+						turnable = false;
+					}
 				}else if(p.getDirection()==3){
 					p.setHorSkewConstant(p.getHorSkewConstant()-.6);
+					if(p.getHorSkewConstant() <= -4.8){
+						turnable = false;
+					}
 				}else if(p.getDirection()==4){
 					p.setVertSkewConstant(p.getVertSkewConstant()+.6);
+					if(p.getVertSkewConstant() >= 4.8){
+						turnable = false;
+					}
 				}
 				repaint();
 			}
@@ -191,7 +205,7 @@ public class GraphicalGrid extends JPanel{
 		return ret;
 	}
 
-	public void play(){
+	public void play(PacmanIntroMenu pim){
 		p.move();
 		repaint();
 		redGhost.move();
@@ -199,13 +213,13 @@ public class GraphicalGrid extends JPanel{
 		tealGhost.move();
 		yellowGhost.move();
 		if(redGhost.colliding(p))
-			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
+			pim.KILL();
 		if(pinkGhost.colliding(p))
-			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
+			pim.KILL();
 		if(tealGhost.colliding(p))
-			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
+			pim.KILL();
 		if(yellowGhost.colliding(p))
-			pacFrame.dispatchEvent(new WindowEvent(pacFrame, WindowEvent.WINDOW_CLOSING));
+			pim.KILL();
 		repaint();
 	}
 	public static void main(String[] args) {
