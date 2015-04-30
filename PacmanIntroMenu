@@ -15,16 +15,28 @@ public class PacmanIntroMenu extends JPanel {
 	BufferedImage titleImage;
 	BufferedImage imageCheck;
 	GraphicalGrid g;
-	JPanel thisOne=this;
+	PacmanIntroMenu thisOne=this;
 	JFrame pacFrame;
 	boolean resetBoolean;
 	boolean startGame = false;
 	int timeSlice=500;
 	public Timer changeCheckTimer=new Timer(timeSlice, new ActionListener(){
 		public void actionPerformed(ActionEvent arg0) {
-			g.play();
+			g.play(thisOne);
 		}
 	});
+	public void KILL(){
+		changeCheckTimer.stop();
+		pacmanFrame.dispose();
+		pacmanFrame=new JFrame();
+		pacmanFrame.setContentPane(new GameOverPanel());
+		pacmanFrame.setTitle("Game Over!");
+		pacmanFrame.setSize(650, 657);
+		pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pacmanFrame.setResizable(false);
+		pacmanFrame.setVisible(true);
+		
+	}
 	public void setTimeSlice(int slice){
 		timeSlice=slice;
 	}
@@ -79,6 +91,15 @@ public class PacmanIntroMenu extends JPanel {
 			checkForTrue();
 		}
 		
+	}
+	public class GameOverPanel extends JPanel{
+		public void paintComponent(Graphics g){
+			g.setColor(Color.black);
+			g.fillRect(0, 0, 650, 657);
+			g.setColor(Color.green);
+			g.setFont(new Font("Serif", Font.BOLD, 36));
+			g.drawString("GAME OVER", 250, 300);
+		}
 	}
 	public class StoreButtonListener implements ActionListener{
 
