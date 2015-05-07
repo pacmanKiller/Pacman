@@ -11,48 +11,58 @@ public class Ghost extends Character{
 	public final int UP = 2;
 	public final int LEFT = 3;
 	public final int DOWN = 4;
-	public Ghost(int xStart, int yStart, Grid g, String col){
+	private int preferredX = 1;
+	private int preferredY = 2;
+	private Pacman pac;
+	public Ghost(int xStart, int yStart, Grid g, String col, Pacman p){
 		super(xStart,yStart, g, "ghost");
 		color = col;
+		pac = p;
 	}
-	public void move(){
+	public void dirChange(){
 		ArrayList moves = openDirections();
 		setDirection((int)moves.get((int)(Math.random()*moves.size())));
-		setXLoc(nextLocation()[0]);
-		setYLoc(nextLocation()[1]);
+	}
+	public void move(){
 		setHorSkewConstant(0);
 		setVertSkewConstant(0);
+//		for(int x = 0; x < moves.size(); x++)
+//			System.out.println(moves.get(x));
+//		System.out.println(getDirection());
+		setXLoc(nextLocation()[0]);
+		setYLoc(nextLocation()[1]);
+		setPicture();
 	}
 	private ArrayList openDirections(){
+		preferredDirection();
 		ArrayList ret = new ArrayList();
 		int opposite = 0;
+//		if(getGrid.isValid())
 		if(getGrid().isValid(nextLocation(1)[0],nextLocation(1)[1]) == 1){
-			if(oppositeDirection(1))
-				opposite = 1;
-			else
+			ret.add(1);
+			for(int x = 0; preferredX == 1 && x < 10; x++){
 				ret.add(1);
+			}
 		}
 		if(getGrid().isValid(nextLocation(2)[0],nextLocation(2)[1]) == 1){
-			if(oppositeDirection(2))
-				opposite = 2;
-			else
+			ret.add(2);
+			for(int x = 0; preferredY == 2 && x < 10; x++){
 				ret.add(2);
+			}
 		}
 		if(getGrid().isValid(nextLocation(3)[0],nextLocation(3)[1]) == 1){
-			if(oppositeDirection(3))
-				opposite = 3;
-			else
+			ret.add(3);
+			for(int x = 0; preferredY == 3 && x < 10; x++){
 				ret.add(3);
+			}
 		}
 		if(getGrid().isValid(nextLocation(4)[0],nextLocation(4)[1]) == 1){
-			if(oppositeDirection(4))
-				opposite = 4;
-			else
+			ret.add(4);
+			for(int x = 0; preferredY == 4 && x < 10; x++){
 				ret.add(4);
+			}
 		}
-		if(ret.size() == 0){
-			ret.add(opposite);
-		}
+
 		return ret;
 	}
 	private String getDirectionPath(int direction){
@@ -67,16 +77,21 @@ public class Ghost extends Character{
 		}
 		return "";
 	}
-	private boolean oppositeDirection(int dir){
-		if(dir == Character.RIGHT && getDirection() == Character.LEFT)
-			return true;
-		if(dir == Character.LEFT && getDirection() == Character.RIGHT)
-			return true;
-		if(dir == Character.UP && getDirection() == Character.DOWN)
-			return true;
-		if(dir == Character.DOWN && getDirection() == Character.UP)
-			return true;
-		return false;
+	private void preferredDirection(){
+		if(pac.getPositions()[0] > getPositions()[0]){
+			preferredX = RIGHT;
+//			System.out.println("right");
+		}else if(pac.getPositions()[0] < getPositions()[0]){
+			preferredX = LEFT;
+//			System.out.println("left");
+		}
+		if(pac.getPositions()[1] > getPositions()[1]){
+			preferredY = DOWN;
+//			System.out.println("down");
+		}else if (pac.getPositions()[1] < getPositions()[1]){
+			preferredY = UP;
+//			System.out.println("up");
+		}
 	}
 	public void setPicture(){
 		try {
