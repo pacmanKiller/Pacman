@@ -12,7 +12,7 @@ import javax.swing.*;
 
 
 public class GraphicalGrid extends JPanel{
-	BufferedImage image, littleTac, bigTac,pacman;
+	BufferedImage image, littleTac, bigTac,pacman, superSpeed;
 	JFrame pacFrame;
 	boolean gridFilled;
 	Grid grid;
@@ -21,8 +21,12 @@ public class GraphicalGrid extends JPanel{
 	static Ghost pinkGhost;
 	static Ghost tealGhost;
 	static Ghost yellowGhost;
-	static Ghost blindGhost;
+	static Ghost redGhost1;
+	static Ghost pinkGhost1;
+	static Ghost tealGhost1;
+	static Ghost yellowGhost1;
 	static boolean turnable = true;
+	static int pacDir = 3;
 
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
@@ -32,7 +36,6 @@ public class GraphicalGrid extends JPanel{
 				pinkGhost.setPicture();
 				tealGhost.setPicture();
 				yellowGhost.setPicture();
-				blindGhost.setPicture();
 				p.setPicture();
 				repaint();
 			}
@@ -64,6 +67,8 @@ public class GraphicalGrid extends JPanel{
 				}
 				repaint();
 			}
+			if(redGhost.getHorSkewConstant() == 0 && redGhost.getVertSkewConstant() == 0)
+				redGhost.dirChange();
 			if(grid.isValid(redGhost.nextLocation()[0], redGhost.nextLocation()[1]) == 1){
 				if(redGhost.getDirection()==1){
 					redGhost.setHorSkewConstant(redGhost.getHorSkewConstant()+.7);
@@ -76,6 +81,8 @@ public class GraphicalGrid extends JPanel{
 				}
 				repaint();
 			}
+			if(pinkGhost.getHorSkewConstant() == 0 && pinkGhost.getVertSkewConstant() == 0)
+				pinkGhost.dirChange();
 			if(grid.isValid(pinkGhost.nextLocation()[0], pinkGhost.nextLocation()[1]) == 1){
 				if(pinkGhost.getDirection()==1){
 					pinkGhost.setHorSkewConstant(pinkGhost.getHorSkewConstant()+.7);
@@ -88,6 +95,8 @@ public class GraphicalGrid extends JPanel{
 				}
 				repaint();
 			}
+			if(tealGhost.getHorSkewConstant() == 0 && tealGhost.getVertSkewConstant() == 0)
+				tealGhost.dirChange();
 			if(grid.isValid(tealGhost.nextLocation()[0], tealGhost.nextLocation()[1]) == 1){
 				if(tealGhost.getDirection()==1){
 					tealGhost.setHorSkewConstant(tealGhost.getHorSkewConstant()+.7);
@@ -100,6 +109,8 @@ public class GraphicalGrid extends JPanel{
 				}
 				repaint();
 			}
+			if(yellowGhost.getHorSkewConstant() == 0 && yellowGhost.getVertSkewConstant() == 0)
+				yellowGhost.dirChange();
 			if(grid.isValid(yellowGhost.nextLocation()[0], yellowGhost.nextLocation()[1]) == 1){
 				if(yellowGhost.getDirection()==1){
 					yellowGhost.setHorSkewConstant(yellowGhost.getHorSkewConstant()+.7);
@@ -112,18 +123,7 @@ public class GraphicalGrid extends JPanel{
 				}
 				repaint();
 			}
-			if(grid.isValid(blindGhost.nextLocation()[0], blindGhost.nextLocation()[1]) == 1){
-				if(blindGhost.getDirection()==1){
-					blindGhost.setHorSkewConstant(blindGhost.getHorSkewConstant()+.7);
-				}else if(blindGhost.getDirection()==2){
-					blindGhost.setVertSkewConstant(blindGhost.getVertSkewConstant()-.7);
-				}else if(blindGhost.getDirection()==3){
-					blindGhost.setHorSkewConstant(blindGhost.getHorSkewConstant()-.7);
-				}else if(blindGhost.getDirection()==4){
-					blindGhost.setVertSkewConstant(blindGhost.getVertSkewConstant()+.7);
-				}
-				repaint();
-			}
+			repaint();
 		}
 	});
 	GraphicalGrid(){
@@ -131,16 +131,16 @@ public class GraphicalGrid extends JPanel{
 		skewTimer.start();
 		grid=new Grid();
 		p=new Pacman(15, 23, grid);
-		redGhost=new Ghost(1, 1, grid, "Red");
-		pinkGhost=new Ghost(1, 2, grid, "Pink");
-		tealGhost=new Ghost(1, 3, grid, "Teal");
-		yellowGhost=new Ghost(1, 4, grid, "Yellow");
-		blindGhost=new Ghost(1, 5, grid, "RedBlind");
+		redGhost=new Ghost(1, 1, grid, "Red", p);
+		pinkGhost=new Ghost(1, 2, grid, "Pink", p);
+		tealGhost=new Ghost(1, 3, grid, "Teal", p);
+		yellowGhost=new Ghost(1, 4, grid, "Yellow", p);
 		try {
 			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
 			littleTac = ImageIO.read(new File("LittleTac.png"));
 			bigTac=ImageIO.read(new File("BigTac.png"));
 			pacman = ImageIO.read(new File("LeftPacmanMouthOpen.png"));
+			superSpeed = ImageIO.read(new File("superSpeed.png"));
 		} catch (IOException e1) {
 		}
 		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP,0), "face up");
@@ -164,28 +164,20 @@ public class GraphicalGrid extends JPanel{
 		}
 		public void actionPerformed(ActionEvent e) {
 			if(direction==1){
-				if(grid.isValid(player.getPositions()[0]+1, player.getPositions()[1]) == 1){
-//					player.setHorSkewConstant(0);
-//					player.setVertSkewConstant(0);
-					player.setDirection(direction);
+				if(grid.isValid(player.nextLocation()[0]+1, player.nextLocation()[1]) != 0 || (grid.isValid(player.nextLocation()[0], player.nextLocation()[1]) == 0 && grid.isValid(player.getPositions()[0]+1, player.getPositions()[1]) != 0)){
+					pacDir = direction;
 				}
 			}else if(direction==2){
-				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]-1) == 1){
-//					player.setHorSkewConstant(0);
-//					player.setVertSkewConstant(0);
-					player.setDirection(direction);
+				if(grid.isValid(player.nextLocation()[0], player.nextLocation()[1]-1) != 0 || (grid.isValid(player.nextLocation()[0], player.nextLocation()[1]) == 0 && grid.isValid(player.getPositions()[0], player.getPositions()[1]-1) != 0)){
+					pacDir = direction;
 				}	
 			}else if(direction==3){
-				if(grid.isValid(player.getPositions()[0]-1, player.getPositions()[1]) == 1){
-//					player.setHorSkewConstant(0);
-//					player.setVertSkewConstant(0);
-					player.setDirection(direction);
+				if(grid.isValid(player.nextLocation()[0]-1, player.nextLocation()[1]) != 0 || (grid.isValid(player.nextLocation()[0], player.nextLocation()[1]) == 0 && grid.isValid(player.getPositions()[0]-1, player.getPositions()[1]) != 0)){
+					pacDir = direction;
 				}	
 			}else if(direction==4){
-				if(grid.isValid(player.getPositions()[0], player.getPositions()[1]+1) == 1){
-//					player.setHorSkewConstant(0);
-//					player.setVertSkewConstant(0);
-					player.setDirection(direction);
+				if(grid.isValid(player.nextLocation()[0], player.nextLocation()[1]+1) != 0 || (grid.isValid(player.nextLocation()[0], player.nextLocation()[1]) == 0 && grid.isValid(player.getPositions()[0], player.getPositions()[1]+1) != 0)){
+					pacDir = direction;
 				}	
 			}else{}
 
@@ -205,17 +197,15 @@ public class GraphicalGrid extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, this);
+		g.drawImage(superSpeed, 10, 10, this);
 		fillGraphicalGrid(g);
 		g.drawImage(p.getPicture(), (int)((int)((p.getPositions()[0]*19.4)+68)+p.getHorSkewConstant()),(int)((int)((p.getPositions()[1]*19.4)+2)+p.getVertSkewConstant()), this);
 		g.drawImage(redGhost.getPicture(), (int)((int)((redGhost.getPositions()[0]*19.4)+68)+redGhost.getHorSkewConstant()),(int)((int)((redGhost.getPositions()[1]*19.4)+2)+redGhost.getVertSkewConstant()), this);
 		g.drawImage(pinkGhost.getPicture(), (int)((int)((pinkGhost.getPositions()[0]*19.4)+68)+pinkGhost.getHorSkewConstant()),(int)((int)((pinkGhost.getPositions()[1]*19.4)+2)+pinkGhost.getVertSkewConstant()), this);
 		g.drawImage(tealGhost.getPicture(), (int)((int)((tealGhost.getPositions()[0]*19.4)+68)+tealGhost.getHorSkewConstant()),(int)((int)((tealGhost.getPositions()[1]*19.4)+2)+tealGhost.getVertSkewConstant()), this);
 		g.drawImage(yellowGhost.getPicture(), (int)((int)((yellowGhost.getPositions()[0]*19.4)+68)+yellowGhost.getHorSkewConstant()),(int)((int)((yellowGhost.getPositions()[1]*19.4)+2)+yellowGhost.getVertSkewConstant()), this);
-		g.drawImage(blindGhost.getPicture(), (int)((int)((blindGhost.getPositions()[0]*19.4)+68)+blindGhost.getHorSkewConstant()),(int)((int)((blindGhost.getPositions()[1]*19.4)+2)+blindGhost.getVertSkewConstant()), this);
 		g.setColor(Color.white);
 		g.drawString("Score: "+grid.getScore(), 20, 620);
-
-
 	}
 	public boolean tacIteration(){
 		boolean ret = true;
@@ -231,12 +221,12 @@ public class GraphicalGrid extends JPanel{
 
 	public void play(PacmanIntroMenu pim){
 		p.move();
+		p.setDirection(pacDir);
 		repaint();
 		redGhost.move();
 		pinkGhost.move();
 		tealGhost.move();
 		yellowGhost.move();
-		blindGhost.move();
 		if(redGhost.colliding(p))
 			pim.KILL();
 		if(pinkGhost.colliding(p))
@@ -245,11 +235,6 @@ public class GraphicalGrid extends JPanel{
 			pim.KILL();
 		if(yellowGhost.colliding(p))
 			pim.KILL();
-		if(blindGhost.colliding(p))
-			pim.KILL();
 		repaint();
 	}
-//	public static void main(String[] args) {
-//		
-//	}
 }
