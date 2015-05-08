@@ -20,11 +20,18 @@ public class PacmanIntroMenu extends JPanel {
 	boolean resetBoolean;
 	boolean startGame = false;
 	int timeSlice=500;
-	public Timer changeCheckTimer=new Timer(timeSlice, new ActionListener(){
+	int pacSpeedFactor = 1;
+	public Timer changeCheckTimer=new Timer(timeSlice/pacSpeedFactor, new ActionListener(){
 		public void actionPerformed(ActionEvent arg0) {
 			g.play(thisOne);
 		}
 	});
+	public int getSpeedFactor(){
+		return pacSpeedFactor;
+	}
+	public void setSpeedFactor(int newFactor){
+		 pacSpeedFactor = newFactor;
+	}
 	public void KILL(){
 		changeCheckTimer.stop();
 		pacmanFrame.dispose();
