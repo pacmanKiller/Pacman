@@ -269,8 +269,14 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 	public void mousePressed(MouseEvent e) {
 		x=e.getX();
 		y=e.getY();
-		if((x>=20 && x<=45) && (y>=10 && y<=30)){
-			System.out.println("FUCK YOU");
+	if((x>=20 && x<=45) && (y>=10 && y<=32)){
+			if(grid.getScore()>=400){
+				grid.setScore(grid.getScore()-400);
+				pacSpeedFactor+=1;
+				menu.setPacSpeedFactor(menu.getPacSpeedFactor()+1);
+				System.out.println(pacSpeedFactor);
+				System.out.println(menu.getPacSpeedFactor());
+			}
 		}
 	}
 	public void mouseReleased(MouseEvent arg0) {}
