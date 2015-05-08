@@ -246,6 +246,7 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 			pinkGhost.move();
 			tealGhost.move();
 			yellowGhost.move();
+			blindGhost.move();
 			turn = 1;
 		}
 		else
@@ -258,11 +259,19 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 			pim.KILL();
 		if(yellowGhost.colliding(p))
 			pim.KILL();
+		if(blindGhost.colliding(p))
+			pim.KILL();
 		repaint();
 	}
 	public void mouseClicked(MouseEvent arg0) {}
 	public void mouseEntered(MouseEvent arg0) {}
 	public void mouseExited(MouseEvent arg0) {}
-	public void mousePressed(MouseEvent arg0) {}
+	public void mousePressed(MouseEvent e) {
+		x=e.getX();
+		y=e.getY();
+		if((x>=20 && x<=45) && (y>=10 && y<=30)){
+			System.out.println("FUCK YOU");
+		}
+	}
 	public void mouseReleased(MouseEvent arg0) {}
 }
