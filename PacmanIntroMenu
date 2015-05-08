@@ -20,16 +20,23 @@ public class PacmanIntroMenu extends JPanel {
 	boolean resetBoolean;
 	boolean startGame = false;
 	int timeSlice=500;
-	int pacSpeedFactor = 1;
-	public Timer changeCheckTimer=new Timer(timeSlice/pacSpeedFactor, new ActionListener(){
+	int pacSpeedFactor = 100;
+	int ghostSpeedFactor = 2;
+	public Timer changeCheckTimer=new Timer(timeSlice/pacSpeedFactor/ghostSpeedFactor, new ActionListener(){
 		public void actionPerformed(ActionEvent arg0) {
 			g.play(thisOne);
 		}
 	});
-	public int getSpeedFactor(){
+	public int getShostSpeedFactor(){
+		return ghostSpeedFactor;
+	}
+	public void setGhostSpeedFactor(int newFactor){
+		ghostSpeedFactor = newFactor;
+	}
+	public int getPacSpeedFactor(){
 		return pacSpeedFactor;
 	}
-	public void setSpeedFactor(int newFactor){
+	public void setPacSpeedFactor(int newFactor){
 		 pacSpeedFactor = newFactor;
 	}
 	public void KILL(){
@@ -105,7 +112,7 @@ public class PacmanIntroMenu extends JPanel {
 			g.fillRect(0, 0, 650, 657);
 			g.setColor(Color.green);
 			g.setFont(new Font("Serif", Font.BOLD, 36));
-			g.drawString("GAME OVER!", 212, 300);
+			g.drawString("GAME OVER", 250, 300);
 		}
 	}
 	public class StoreButtonListener implements ActionListener{
