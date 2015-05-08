@@ -30,7 +30,9 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 	static Ghost yellowGhost1;
 	static Ghost blindGhost;
 	static boolean turnable = true;
+	static int pacSpeedFactor = 2;
 	static int pacDir = 3;
+	static int turn = 1;
 
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
@@ -49,26 +51,15 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 	private Timer skewTimer=new Timer(15, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
 			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1]) == 1){
-				if(p.getDirection()==1){
-					p.setHorSkewConstant(p.getHorSkewConstant()+.7);
-					if(p.getHorSkewConstant() >= 4.8){
-						turnable = false;
-					}
-				}else if(p.getDirection()==2){
-					p.setVertSkewConstant(p.getVertSkewConstant()-.7);
-					if(p.getVertSkewConstant() <= -4.8){
-						turnable = false;
-					}
-				}else if(p.getDirection()==3){
-					p.setHorSkewConstant(p.getHorSkewConstant()-.7);
-					if(p.getHorSkewConstant() <= -4.8){
-						turnable = false;
-					}
-				}else if(p.getDirection()==4){
-					p.setVertSkewConstant(p.getVertSkewConstant()+.7);
-					if(p.getVertSkewConstant() >= 4.8){
-						turnable = false;
-					}
+				if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1]) == 1){
+					if(p.getDirection()==1)
+						p.setHorSkewConstant(p.getHorSkewConstant()+.7* pacSpeedFactor);
+					else if(p.getDirection()==2)
+						p.setVertSkewConstant(p.getVertSkewConstant()-.7* pacSpeedFactor);
+					else if(p.getDirection()==3)
+						p.setHorSkewConstant(p.getHorSkewConstant()-.7* pacSpeedFactor);
+					else if(p.getDirection()==4)
+						p.setVertSkewConstant(p.getVertSkewConstant()+.7*pacSpeedFactor);
 				}
 				repaint();
 			}
@@ -240,16 +231,25 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 		}
 		return ret;
 	}
-
+	public int getSpeedFactor(){
+		return pacSpeedFactor;
+	}
+	public void setSpeedFactor(int newFactor){
+		pacSpeedFactor= newFactor;
+	}
 	public void play(PacmanIntroMenu pim){
 		p.move();
 		p.setDirection(pacDir);
 		repaint();
-		redGhost.move();
-		pinkGhost.move();
-		tealGhost.move();
-		yellowGhost.move();
-		blindGhost.move();
+		if(turn == pacSpeedFactor){
+			redGhost.move();
+			pinkGhost.move();
+			tealGhost.move();
+			yellowGhost.move();
+			turn = 1;
+		}
+		else
+			turn++;
 		if(redGhost.colliding(p))
 			pim.KILL();
 		if(pinkGhost.colliding(p))
@@ -258,9 +258,6 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 			pim.KILL();
 		if(yellowGhost.colliding(p))
 			pim.KILL();
-		if(blindGhost.colliding(p))
-			pim.KILL();
-		
 		repaint();
 	}
 	public void mouseClicked(MouseEvent arg0) {}
