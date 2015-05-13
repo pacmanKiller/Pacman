@@ -20,10 +20,11 @@ public class PacmanIntroMenu extends JPanel {
 	boolean resetBoolean;
 	boolean startGame = false;
 	int timeSlice=500;
-	int pacSpeedFactor = 100;
-	int ghostSpeedFactor = 2;
+	int pacSpeedFactor = 1;
+	int ghostSpeedFactor = 1;
 	public Timer changeCheckTimer=new Timer(timeSlice/pacSpeedFactor/ghostSpeedFactor, new ActionListener(){
 		public void actionPerformed(ActionEvent arg0) {
+			g.setIntroMenu(thisOne);
 			g.play(thisOne);
 		}
 	});
@@ -38,6 +39,7 @@ public class PacmanIntroMenu extends JPanel {
 	}
 	public void setPacSpeedFactor(int newFactor){
 		 pacSpeedFactor = newFactor;
+		 changeCheckTimer.setDelay(timeSlice/pacSpeedFactor/ghostSpeedFactor);
 	}
 	public void KILL(){
 		changeCheckTimer.stop();
@@ -55,7 +57,6 @@ public class PacmanIntroMenu extends JPanel {
 		timeSlice=slice;
 	}
 	public PacmanIntroMenu(){
-		
 		pacmanFrame=new JFrame();
 		try {
 			image = ImageIO.read(new File("pacmanBackground.png"));
