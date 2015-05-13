@@ -18,14 +18,17 @@ public class Pacman extends Character{
 	public Pacman(int xStart, int yStart, Grid g){
 		super(xStart, yStart, g, "pacman");
 	}
+	public void directionChange(){
+		
+	}
 	public void move(){
+		setHorSkewConstant(0);
+		setVertSkewConstant(0);
 		int currentDirection=getDirection();
 		if(getGrid().isValid(nextLocation()[0], nextLocation()[1]) == 1){
 			superPower = getGrid().eat(nextLocation()[0], nextLocation()[1]);
 			setXLoc(nextLocation()[0]);
 			setYLoc(nextLocation()[1]);
-			setHorSkewConstant(0);
-			setVertSkewConstant(0);
 		}
 		if(getGrid().isValid(nextLocation()[0], nextLocation()[1]) == 2){
 			setYLoc(nextLocation()[1]);
