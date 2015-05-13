@@ -52,7 +52,7 @@ public class Ghost extends Character{
 		}
 		if(getGrid().isValid(nextLocation(3)[0],nextLocation(3)[1]) == 1){
 			ret.add(3);
-			for(int x = 0; preferredY == 3 && x < 10; x++){
+			for(int x = 0; preferredX == 3 && x < 10; x++){
 				ret.add(3);
 			}
 		}
