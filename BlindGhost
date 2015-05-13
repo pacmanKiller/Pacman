@@ -1,0 +1,44 @@
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
+
+public class BlindGhost extends Ghost{
+	public BlindGhost(int xStart, int yStart, Grid g, String col, Pacman p) {
+		super(xStart, yStart, g, col, p);
+	}
+	public void dirChange(){
+		ArrayList possibles = new ArrayList();
+		if(getGrid().isValid(nextLocation(RIGHT)[0],nextLocation(RIGHT)[1]) == 1){
+			possibles.add(RIGHT);
+			for(int x = 0; x < 10 && getDirection() != LEFT; x++)
+				possibles.add(RIGHT);
+		}
+		if(getGrid().isValid(nextLocation(LEFT)[0],nextLocation(LEFT)[1]) == 1){
+			possibles.add(LEFT);
+			for(int x = 0; x < 10 && getDirection() != RIGHT; x++)
+				possibles.add(LEFT);
+		}
+		if(getGrid().isValid(nextLocation(UP)[0],nextLocation(UP)[1]) == 1){
+			possibles.add(UP);
+			for(int x = 0; x < 10 && getDirection() != DOWN; x++)
+				possibles.add(UP);
+		}
+		if(getGrid().isValid(nextLocation(DOWN)[0],nextLocation(DOWN)[1]) == 1){
+			possibles.add(DOWN);
+			for(int x = 0; x < 10 && getDirection() != UP; x++)
+				possibles.add(DOWN);
+		}
+		setDirection((int)possibles.get((int)(Math.random()*possibles.size())));	
+	}
+	public void setPicture(){
+		try {
+			passPicture(ImageIO.read(new File("RedBlind"+getDirectionPath(getDirection())+"Ghost.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
