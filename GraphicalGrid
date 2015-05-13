@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,32 +20,23 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 	boolean gridFilled;
 	Grid grid;
 	int x, y;
+	static ArrayList<Ghost> ghosts = new ArrayList(); 
 	static Pacman p;
-	static Ghost redGhost;
-	static Ghost pinkGhost;
-	static Ghost tealGhost;
-	static Ghost yellowGhost;
-	static Ghost redGhost1;
-	static Ghost pinkGhost1;
-	static Ghost tealGhost1;
-	static Ghost yellowGhost1;
-	static Ghost blindGhost;
 	static boolean turnable = true;
-	static int pacSpeedFactor = 100;
-	static int ghostSpeedFactor = 2;
+	static int pacSpeedFactor = 1;
+	static int ghostSpeedFactor = 1;
 	static int pacDir = 3;
 	static int ghostTurn = 1;
 	static int pacTurn = 1;
+	PacmanIntroMenu menu=null;
 
 	private Timer mouthTimer=new Timer(100, new ActionListener(){
 		public void actionPerformed(ActionEvent e){
 			if(grid.isValid(p.nextLocation()[0], p.nextLocation()[1]) == 1){
 				p.toggleMouth();
-				redGhost.setPicture();
-				pinkGhost.setPicture();
-				tealGhost.setPicture();
-				yellowGhost.setPicture();
-				blindGhost.setPicture();
+				for(int x = 0; x < ghosts.size(); x++){
+					ghosts.get(x).setPicture();
+				}
 				p.setPicture();
 				repaint();
 			}
@@ -65,75 +57,21 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 				}
 				repaint();
 			}
-			if(redGhost.getHorSkewConstant() == 0 && redGhost.getVertSkewConstant() == 0)
-				redGhost.dirChange();
-			if(grid.isValid(redGhost.nextLocation()[0], redGhost.nextLocation()[1]) == 1){
-				if(redGhost.getDirection()==1){
-					redGhost.setHorSkewConstant(redGhost.getHorSkewConstant()+.7*ghostSpeedFactor);
-				}else if(redGhost.getDirection()==2){
-					redGhost.setVertSkewConstant(redGhost.getVertSkewConstant()-.7*ghostSpeedFactor);
-				}else if(redGhost.getDirection()==3){
-					redGhost.setHorSkewConstant(redGhost.getHorSkewConstant()-.7*ghostSpeedFactor);
-				}else if(redGhost.getDirection()==4){
-					redGhost.setVertSkewConstant(redGhost.getVertSkewConstant()+.7*ghostSpeedFactor);
+			for(int x = 0; x < ghosts.size(); x++){
+			if(ghosts.get(x).getHorSkewConstant() == 0 && ghosts.get(x).getVertSkewConstant() == 0)
+				ghosts.get(x).dirChange();
+			if(grid.isValid(ghosts.get(x).nextLocation()[0], ghosts.get(x).nextLocation()[1]) == 1){
+					if(ghosts.get(x).getDirection()==1){
+						ghosts.get(x).setHorSkewConstant(ghosts.get(x).getHorSkewConstant()+.7*ghostSpeedFactor);
+					}else if(ghosts.get(x).getDirection()==2){
+						ghosts.get(x).setVertSkewConstant(ghosts.get(x).getVertSkewConstant()-.7*ghostSpeedFactor);
+					}else if(ghosts.get(x).getDirection()==3){
+						ghosts.get(x).setHorSkewConstant(ghosts.get(x).getHorSkewConstant()-.7*ghostSpeedFactor);
+					}else if(ghosts.get(x).getDirection()==4){
+						ghosts.get(x).setVertSkewConstant(ghosts.get(x).getVertSkewConstant()+.7*ghostSpeedFactor);
+					}
+					repaint();
 				}
-				repaint();
-			}
-			if(pinkGhost.getHorSkewConstant() == 0 && pinkGhost.getVertSkewConstant() == 0)
-				pinkGhost.dirChange();
-			if(grid.isValid(pinkGhost.nextLocation()[0], pinkGhost.nextLocation()[1]) == 1){
-				if(pinkGhost.getDirection()==1){
-					pinkGhost.setHorSkewConstant(pinkGhost.getHorSkewConstant()+.7*ghostSpeedFactor);
-				}else if(pinkGhost.getDirection()==2){
-					pinkGhost.setVertSkewConstant(pinkGhost.getVertSkewConstant()-.7*ghostSpeedFactor);
-				}else if(pinkGhost.getDirection()==3){
-					pinkGhost.setHorSkewConstant(pinkGhost.getHorSkewConstant()-.7*ghostSpeedFactor);
-				}else if(pinkGhost.getDirection()==4){
-					pinkGhost.setVertSkewConstant(pinkGhost.getVertSkewConstant()+.7*ghostSpeedFactor);
-				}
-				repaint();
-			}
-			if(tealGhost.getHorSkewConstant() == 0 && tealGhost.getVertSkewConstant() == 0)
-				tealGhost.dirChange();
-			if(grid.isValid(tealGhost.nextLocation()[0], tealGhost.nextLocation()[1]) == 1){
-				if(tealGhost.getDirection()==1){
-					tealGhost.setHorSkewConstant(tealGhost.getHorSkewConstant()+.7*ghostSpeedFactor);
-				}else if(tealGhost.getDirection()==2){
-					tealGhost.setVertSkewConstant(tealGhost.getVertSkewConstant()-.7*ghostSpeedFactor);
-				}else if(tealGhost.getDirection()==3){
-					tealGhost.setHorSkewConstant(tealGhost.getHorSkewConstant()-.7*ghostSpeedFactor);
-				}else if(tealGhost.getDirection()==4){
-					tealGhost.setVertSkewConstant(tealGhost.getVertSkewConstant()+.7*ghostSpeedFactor);
-				}
-				repaint();
-			}
-			if(yellowGhost.getHorSkewConstant() == 0 && yellowGhost.getVertSkewConstant() == 0)
-				yellowGhost.dirChange();
-			if(grid.isValid(yellowGhost.nextLocation()[0], yellowGhost.nextLocation()[1]) == 1){
-				if(yellowGhost.getDirection()==1){
-					yellowGhost.setHorSkewConstant(yellowGhost.getHorSkewConstant()+.7*ghostSpeedFactor);
-				}else if(yellowGhost.getDirection()==2){
-					yellowGhost.setVertSkewConstant(yellowGhost.getVertSkewConstant()-.7*ghostSpeedFactor);
-				}else if(yellowGhost.getDirection()==3){
-					yellowGhost.setHorSkewConstant(yellowGhost.getHorSkewConstant()-.7*ghostSpeedFactor);
-				}else if(yellowGhost.getDirection()==4){
-					yellowGhost.setVertSkewConstant(yellowGhost.getVertSkewConstant()+.7*ghostSpeedFactor);
-				}
-				repaint();
-			}
-			if(blindGhost.getHorSkewConstant() == 0 && blindGhost.getVertSkewConstant() == 0)
-				blindGhost.dirChange();
-			if(grid.isValid(blindGhost.nextLocation()[0], blindGhost.nextLocation()[1]) == 1){
-				if(blindGhost.getDirection()==1){
-					blindGhost.setHorSkewConstant(blindGhost.getHorSkewConstant()+.7*ghostSpeedFactor);
-				}else if(blindGhost.getDirection()==2){
-					blindGhost.setVertSkewConstant(blindGhost.getVertSkewConstant()-.7*ghostSpeedFactor);
-				}else if(blindGhost.getDirection()==3){
-					blindGhost.setHorSkewConstant(blindGhost.getHorSkewConstant()-.7*ghostSpeedFactor);
-				}else if(blindGhost.getDirection()==4){
-					blindGhost.setVertSkewConstant(blindGhost.getVertSkewConstant()+.7*ghostSpeedFactor);
-				}
-				repaint();
 			}
 			repaint();
 		}
@@ -141,13 +79,13 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 	GraphicalGrid(){
 		mouthTimer.start();
 		skewTimer.start();
+		addMouseListener(this);
 		grid=new Grid();
 		p=new Pacman(15, 23, grid);
-		redGhost=new Ghost(1, 1, grid, "Red", p);
-		pinkGhost=new Ghost(1, 2, grid, "Pink", p);
-		tealGhost=new Ghost(1, 3, grid, "Teal", p);
-		yellowGhost=new Ghost(1, 4, grid, "Yellow", p);
-		blindGhost=new Ghost(1, 5, grid, "RedBlind", p);
+		ghosts.add(new Ghost(1, 1, grid, "Red", p));
+		ghosts.add(new Ghost(1, 2, grid, "Pink", p));
+		ghosts.add(new Ghost(1, 3, grid, "Teal", p));
+		ghosts.add(new Ghost(1, 4, grid, "Yellow", p));
 		try {
 			image = ImageIO.read(new File("Classic-PacmanBoard.png"));
 			littleTac = ImageIO.read(new File("LittleTac.png"));
@@ -165,8 +103,14 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 		this.getActionMap().put("face left", new MoveAction(3, p));
 		this.getActionMap().put("face right", new MoveAction(1, p));
 	}
+	public ArrayList<Ghost> getGhosts(){
+		return ghosts;
+	}
 	public Pacman getPacman(){
 		return p;
+	}
+	public void setIntroMenu(PacmanIntroMenu newMenu){
+		menu=newMenu;
 	}
 	private class MoveAction extends AbstractAction{
 		int direction;
@@ -213,11 +157,8 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 		g.drawImage(superSpeed, 20, 10, this);
 		fillGraphicalGrid(g);
 		g.drawImage(p.getPicture(), (int)((int)((p.getPositions()[0]*19.4)+68)+p.getHorSkewConstant()),(int)((int)((p.getPositions()[1]*19.4)+2)+p.getVertSkewConstant()), this);
-		g.drawImage(redGhost.getPicture(), (int)((int)((redGhost.getPositions()[0]*19.4)+68)+redGhost.getHorSkewConstant()),(int)((int)((redGhost.getPositions()[1]*19.4)+2)+redGhost.getVertSkewConstant()), this);
-		g.drawImage(pinkGhost.getPicture(), (int)((int)((pinkGhost.getPositions()[0]*19.4)+68)+pinkGhost.getHorSkewConstant()),(int)((int)((pinkGhost.getPositions()[1]*19.4)+2)+pinkGhost.getVertSkewConstant()), this);
-		g.drawImage(tealGhost.getPicture(), (int)((int)((tealGhost.getPositions()[0]*19.4)+68)+tealGhost.getHorSkewConstant()),(int)((int)((tealGhost.getPositions()[1]*19.4)+2)+tealGhost.getVertSkewConstant()), this);
-		g.drawImage(yellowGhost.getPicture(), (int)((int)((yellowGhost.getPositions()[0]*19.4)+68)+yellowGhost.getHorSkewConstant()),(int)((int)((yellowGhost.getPositions()[1]*19.4)+2)+yellowGhost.getVertSkewConstant()), this);
-//		g.drawImage(blindGhost.getPicture(), (int)((int)((blindGhost.getPositions()[0]*19.4)+68)+blindGhost.getHorSkewConstant()),(int)((int)((blindGhost.getPositions()[1]*19.4)+2)+blindGhost.getVertSkewConstant()), this);
+		for(int x = 0; x < ghosts.size(); x++)
+			g.drawImage(ghosts.get(x).getPicture(), (int)((int)(((ghosts.get(x).getPositions()[0]*19.4)+68)+(ghosts.get(x).getHorSkewConstant()))),(int)((int)(((ghosts.get(x).getPositions()[1]*19.4)+2)+(ghosts.get(x).getVertSkewConstant()))), this);
 		g.setColor(Color.white);
 		g.drawString("Score: "+grid.getScore(), 20, 620);
 		g.drawString("400 Points", 5, 50);
@@ -255,24 +196,18 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 			pacTurn++;
 		repaint();
 		if(ghostTurn == pacSpeedFactor){
-			redGhost.move();
-			pinkGhost.move();
-			tealGhost.move();
-			yellowGhost.move();
-			blindGhost.move();
+			for(int x = 0; x < ghosts.size(); x++){
+				ghosts.get(x).move();
+			}
 			ghostTurn = 1;
 		}
 		else
 			ghostTurn++;
-		if(redGhost.colliding(p))
-			pim.KILL();
-		if(pinkGhost.colliding(p))
-			pim.KILL();
-		if(tealGhost.colliding(p))
-			pim.KILL();
-		if(yellowGhost.colliding(p))
-			pim.KILL();
-		if(blindGhost.colliding(p))
+		for(int x = 0; x < ghosts.size(); x++){
+			if(ghosts.get(x).colliding(p))
+				pim.KILL();
+		}
+		if(grid.checkEmpty())
 			pim.KILL();
 		repaint();
 	}
@@ -282,8 +217,12 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 	public void mousePressed(MouseEvent e) {
 		x=e.getX();
 		y=e.getY();
-		if((x>=20 && x<=45) && (y>=10 && y<=30)){
-			System.out.println("FUCK YOU");
+		if((x>=20 && x<=45) && (y>=10 && y<=33)){
+			if(grid.getScore()>=5000){
+				grid.setScore(grid.getScore()-5000);
+				pacSpeedFactor+=1;
+				menu.setPacSpeedFactor(menu.getPacSpeedFactor()+1);		
+			}
 		}
 	}
 	public void mouseReleased(MouseEvent arg0) {}
