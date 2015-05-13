@@ -18,6 +18,9 @@ public class Grid {
 	public int getScore(){
 		return score;
 	}
+	public void setScore(int newScore){
+		score=newScore;
+	}
 	private void fillGrids(){
 		fillHorizontal(1,1,12,true);
 		fillHorizontal(15,1,12,true);
@@ -70,6 +73,15 @@ public class Grid {
 		ticTacs[25][2] = 2;
 		ticTacs[0][21] = 2;
 		ticTacs[25][21] = 2;
+	}
+	public boolean checkEmpty(){
+		for(int x = 0; x < xSize; x++){
+			for(int y = 0; y < ySize; y++){
+				if(ticTacs[x][y] != 0)
+					return false;
+			}
+		}
+		return true;
 	}
 	private void fillVertical(int yStart, int x, int length, boolean tac){
 		for(int y =0 ; y < length; y++){
