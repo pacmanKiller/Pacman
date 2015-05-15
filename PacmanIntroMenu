@@ -134,6 +134,17 @@ public class PacmanIntroMenu extends JPanel {
 		pacmanFrame.setVisible(true);
 		
 	}
+	public void YOUWIN(){
+		changeCheckTimer.stop();
+		pacmanFrame.dispose();
+		pacmanFrame=new JFrame();
+		pacmanFrame.setContentPane(new YouWinPanel());
+		pacmanFrame.setTitle("Victory!");
+		pacmanFrame.setSize(650, 657);
+		pacmanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pacmanFrame.setResizable(false);
+		pacmanFrame.setVisible(true);
+	}
 	public void setTimeSlice(int slice){
 		timeSlice=slice;
 	}
@@ -150,7 +161,6 @@ public class PacmanIntroMenu extends JPanel {
 		
 		startButton=new JButton("Start Game");
 		quitButton=new JButton("Quit");
-		storeButton=new JButton("Upgrade Store");
 		pacmanFrame.setContentPane(this);
 		startButton.addActionListener(new StartButtonListener());
 		quitButton.addActionListener(new ActionListener(){
@@ -158,7 +168,6 @@ public class PacmanIntroMenu extends JPanel {
 				pacmanFrame.dispatchEvent(new WindowEvent(pacmanFrame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
-		storeButton.addActionListener(new StoreButtonListener());
 		c.fill= GridBagConstraints.CENTER;
 		c.gridx = 0;
 		c.gridy = 10;
@@ -170,7 +179,6 @@ public class PacmanIntroMenu extends JPanel {
 		c.fill=GridBagConstraints.HORIZONTAL;
 		c.gridx=0;
 		c.gridy=11;
-		this.add(storeButton, c);
 		ImageIcon pacmanIcon=new ImageIcon("pacmanBackground.png");
 		pacmanFrame.setTitle("Start Menu");
 		pacmanFrame.setSize(575, 657);
@@ -194,7 +202,16 @@ public class PacmanIntroMenu extends JPanel {
 			g.fillRect(0, 0, 650, 657);
 			g.setColor(Color.green);
 			g.setFont(new Font("Serif", Font.BOLD, 36));
-			g.drawString("GAME OVER", 250, 300);
+			g.drawString("GAME OVER!", 215, 275);
+		}
+	}
+	public class YouWinPanel extends JPanel{
+		public void paintComponent(Graphics g){
+			g.setColor(Color.black);
+			g.fillRect(0, 0, 650, 657);
+			g.setColor(Color.green);
+			g.setFont(new Font("Serif", Font.BOLD, 36));
+			g.drawString("YOU WIN!", 245, 275);
 		}
 	}
 	public class StoreButtonListener implements ActionListener{
