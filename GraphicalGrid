@@ -213,7 +213,7 @@ public class GraphicalGrid extends JPanel implements MouseListener{
 				pim.KILL();
 		}
 		if(grid.checkEmpty())
-			pim.KILL();
+			pim.YOUWIN();
 		repaint();
 	}
 	public void mouseClicked(MouseEvent arg0) {}
